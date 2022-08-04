@@ -36,7 +36,7 @@ contract Family is ERC721, Ownable {
     uint256 internal _maxSupply;
     uint256 internal _maturityAge;
 
-    Human[] internal peoples;
+    Human[] internal _peoples;
 
     mapping(uint256 => address) internal _humanToOwner;
     mapping(address => uint256) internal _ownerHumanCount;
@@ -183,7 +183,7 @@ contract Family is ERC721, Ownable {
             "One or more of your tokens are not mature enough"
         );
         require(
-            (peoples[_firstParentID].gender) != (peoples[_secondParentID].gender),
+            (_peoples[_firstParentID].gender) != (_peoples[_secondParentID].gender),
             "Tokens share the same gender and cannot reproduce themselves"
         );
         uint256 random = uint256(
@@ -198,7 +198,7 @@ contract Family is ERC721, Ownable {
             gender = GENDER.KID_GIRL;
             name_ = _girlName;
         }
-        string memory lastname_ = peoples[_firstParentID].lastname;
+        string memory lastname_ = _peoples[_firstParentID].lastname;
         _mintHuman(_totalSupply, gender, name_, lastname_, 0);
     }
 
@@ -210,28 +210,28 @@ contract Family is ERC721, Ownable {
      */
     function checkAgeChanging(uint256 _id) public returns (uint256) {
         require(_humanToOwner[_id] == msg.sender, "You are not the owner of this NFT");
-        peoples[_id].actualAge = (block.timestamp - peoples[_id].mintTime) / 86400 + peoples[_id].mintAge;
-        if (peoples[_id].gender == GENDER.KID_BOY && peoples[_id].actualAge >= _maturityAge) {
-            peoples[_id].gender = GENDER.MAN;
-        } else if (peoples[_id].gender == GENDER.KID_GIRL && peoples[_id].actualAge >= _maturityAge) {
-            peoples[_id].gender = GENDER.WOMEN;
+        _peoples[_id].actualAge = (block.timestamp - _peoples[_id].mintTime) / 86400 + _peoples[_id].mintAge;
+        if (_peoples[_id].gender == GENDER.KID_BOY && _peoples[_id].actualAge >= _maturityAge) {
+            _peoples[_id].gender = GENDER.MAN;
+        } else if (_peoples[_id].gender == GENDER.KID_GIRL && _peoples[_id].actualAge >= _maturityAge) {
+            _peoples[_id].gender = GENDER.WOMEN;
         }
         emit AgeUpdated(
             _id,
-            peoples[_id].gender,
-            peoples[_id].name,
-            peoples[_id].lastname,
-            peoples[_id].actualAge,
-            peoples[_id].mintAge,
-            peoples[_id].mintTime,
+            _peoples[_id].gender,
+            _peoples[_id].name,
+            _peoples[_id].lastname,
+            _peoples[_id].actualAge,
+            _peoples[_id].mintAge,
+            _peoples[_id].mintTime,
             msg.sender
         );
-        return peoples[_id].actualAge;
+        return _peoples[_id].actualAge;
     }
 
     /**
      * @dev This function contains the common functionality of mintHuman() and breeding()
-     * functions. Updates mappings, adds token data to peoples[] array.
+     * functions. Updates mappings, adds token data to _peoples[] array.
      * NewHuman event emitted
      * @param tokenId_ id of new token
      * @param gender_ randomly selected token gender
@@ -261,7 +261,7 @@ contract Family is ERC721, Ownable {
             mintTime: mintTime_,
             owner: msg.sender
         });
-        peoples.push(human);
+        _peoples.push(human);
         _safeMint(msg.sender, tokenId_);
         emit NewHuman(tokenId, gender_, name_, lastname_, age_, mintTime_, msg.sender);
     }
@@ -311,7 +311,7 @@ contract Family is ERC721, Ownable {
      * @dev Returns the data of the given token by passing the token id as a parameter
      */
     function getDataAboutHuman(uint256 id_) external view returns (Human memory) {
-        return peoples[id_];
+        return _peoples[id_];
     }
 
     /**
