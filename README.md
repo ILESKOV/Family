@@ -41,7 +41,7 @@ $ npm install
 ```
 ### 3. 🔍  .env environment variables required to set up
 
-### 4. ⚠️ Run Tests
+### 4. ⚠️  Run Tests
 ```
 $ npm run test
 ```
@@ -58,7 +58,7 @@ $ npm run deployRinkeby
 $ npm run deployMainnet 
 ``` 
 
-### 6. Insert current contract addresses into package.json
+### 6. ✏️ Insert current contract addresses into package.json
 ![Example screenshot](./helpers/Screenshot7.png)
 
 ### 7. 📜 Verify contracts
