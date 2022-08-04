@@ -1,5 +1,5 @@
-# 👩‍🚀👩‍💻'Family' NFT collection
-> There is one contract Family.sol with ERC721 standard implementation. Collection has 4 types of tokens: MAN,WOMAN, KID_BOY and KID_GIRL
+# 👩‍🚀'Family' NFT collection👩‍💻
+> There is one contract Family.sol with ERC721 standard implementation. Collection has 4 types of tokens: MAN, WOMAN, KID_BOY and KID_GIRL
 ## 🧫 Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
@@ -17,7 +17,7 @@
 - When the KID token reaches maturity age and its checked via checkAgeChanging() function this token become adult MAN or WOMAN token
 
  
-## 🤖 Technologies Used
+## 💻 Technologies Used
 - hh coverage
 - slither
 - docgen
