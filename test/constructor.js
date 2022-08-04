@@ -16,6 +16,6 @@ describe("tests of constructors data assignment", function () {
         expect(await Family.connect(wallet1).getMaxSupply()).to.equal(10000)
     })
     it("should assign initial maturity age properly", async function () {
-        expect(await Family.connect(wallet1).getInitialMaturityAge()).to.equal(18)
+        expect(await Family.connect(wallet1).getMaturityAge()).to.equal(18)
     })
 })
