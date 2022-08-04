@@ -63,7 +63,7 @@ $ npm run deployRinkeby
 $ npm run deployMainnet 
 ``` 
 
-### 6. ✏️ Insert current contract addresses into package.json
+### 6. ✏️ Insert current contract address into package.json
 ![Example screenshot](./helpers/Screenshot7.png)
 
 ### 7. 📜 Verify contracts
