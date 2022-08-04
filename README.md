@@ -28,7 +28,7 @@
 - Owner set all variables: mint price, maturity age etc.
 - 100% coverage of tests
 
-## 🔍 Requirements For Initial Setup
+## 👀 Requirements For Initial Setup
 - Install [NodeJS](https://nodejs.org/en/), should work with any node version below 16.16.0
 - Install [Hardhat](https://hardhat.org/)
 
@@ -40,6 +40,11 @@ $ cd repository_file
 $ npm install
 ```
 ### 3. 🔍  .env environment variables required to set up
+Create .env file inside project folder
+- You can get your ethereum or testnet API key [here](https://infura.io/dashboard/ethereum),[here](https://www.alchemy.com) or any other service that allow you to connect to the nodes
+- You can get your private key from your wallet(⚠️Don't share your private key with untrusted parties) 
+- You can get your etherscan API -key [here](https://etherscan.io/myapikey).
+![Example screenshot](./helpers/Screenshot8.png)
 
 ### 4. ⚠️  Run Tests
 ```
