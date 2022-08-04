@@ -121,6 +121,9 @@ contract Family is ERC721, Ownable {
         uint256 maxSupply_,
         uint256 maturityAge_
     ) ERC721("Family", "FAM") {
+        require(mintPrice_ != 0, "Mint price cannot be zero");
+        require(maxSupply_ != 0, "Max supply cannot be zero");
+        require(maturityAge_ > 16, "Maturity age must be higher than 16");
         _mintPrice = mintPrice_;
         _maxSupply = maxSupply_;
         _maturityAge = maturityAge_;
