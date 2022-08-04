@@ -1,0 +1,49 @@
+{
+    "name": "family",
+    "version": "1.0.0",
+    "description": "Contract allows users to mint standard ERC 721 tokens of type MAN or WOMAN, after that, the user can create a KID token, when the KID token reaches maturity, they become adults MAN or WOMAN",
+    "main": "index.js",
+    "scripts": {
+        "prettier": "prettier --write 'contracts/'",
+        "coverage": "npx hardhat coverage --testfiles test",
+        "test": "npx hardhat test",
+        "deployRinkeby": "npx hardhat run --network rinkeby scripts/deploy.js",
+        "deployMainnet ": "npx hardhat run --network ethereum scripts/deploy.js",
+        "verifyRinkeby": "npx hardhat verify --network rinkeby --contract contracts/Family.sol:Family --constructor-args helpers/arguments.js 0x17a05BBD85de67d83a7dC71701921733c0745A65",
+        "verifyMainnet": "npx hardhat verify --network ethereum --contract contracts/Family.sol:Family --constructor-args helpers/arguments.js [Family.sol address]",
+        "docgen": "npx hardhat docgen",
+        "slither": "slither .",
+        "solhint": "solhint 'contracts/**/*.sol'"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ILESKOV/Family.git"
+    },
+    "keywords": [
+        "nft",
+        "erc721",
+        "smart-contract",
+        "solidity",
+        "crypto"
+    ],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ILESKOV/Family/issues"
+    },
+    "homepage": "https://github.com/ILESKOV/Family#readme",
+    "devDependencies": {
+        "@nomicfoundation/hardhat-toolbox": "^1.0.2",
+        "@nomiclabs/hardhat-ethers": "^2.1.0",
+        "hardhat": "^2.10.1",
+        "prettier": "^2.7.1",
+        "prettier-plugin-solidity": "^1.0.0-dev.23"
+    },
+    "dependencies": {
+        "@nomiclabs/hardhat-solhint": "^2.0.1",
+        "@nomiclabs/hardhat-waffle": "^2.0.3",
+        "@openzeppelin/contracts": "^4.7.0",
+        "dotenv": "^16.0.1",
+        "solidity-docgen": "^0.6.0-beta.22"
+    }
+}
