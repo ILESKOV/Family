@@ -53,12 +53,12 @@ contract Family is ERC721, Ownable {
      */
     event NewHuman(
         uint256 id,
-        GENDER gender,
+        GENDER indexed gender,
         string name,
         string lastname,
         uint256 age,
         uint32 mintTime,
-        address owner
+        address indexed owner
     );
 
     /**
@@ -74,13 +74,13 @@ contract Family is ERC721, Ownable {
      */
     event AgeUpdated(
         uint256 id,
-        GENDER gender,
+        GENDER indexed gender,
         string name,
         string lastname,
         uint256 actualAge,
         uint256 mintAge,
         uint256 mintTime,
-        address owner
+        address indexed owner
     );
 
     /**
