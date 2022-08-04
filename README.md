@@ -1,6 +1,6 @@
-# 👩‍🚀'Family' NFT collection👩‍💻
+# 👪 'Family' NFT collection 👫
 > There is one contract Family.sol with ERC721 standard implementation. Collection has 4 types of tokens: MAN, WOMAN, KID_BOY and KID_GIRL
-## 🧫 Table of Contents
+## 📁 Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
 * [Features](#features)
@@ -33,7 +33,7 @@
 - Install [Hardhat](https://hardhat.org/)
 
 ## 📟 Setup
-### 1. 🤓 Clone/Download the Repository
+### 1. 💾 Clone/Download the Repository
 ### 2. 📦 Install Dependencies:
 ```
 $ cd repository_file
