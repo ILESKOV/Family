@@ -81,7 +81,7 @@ contract MockedFamily is Family {
             "One or more of your tokens are not mature enough"
         );
         require(
-            (peoples[_firstParentID].gender) != (peoples[_secondParentID].gender),
+            (_peoples[_firstParentID].gender) != (_peoples[_secondParentID].gender),
             "Tokens share the same gender and cannot reproduce themselves"
         );
         uint256 random;
@@ -97,7 +97,7 @@ contract MockedFamily is Family {
             gender = GENDER.KID_GIRL;
             name_ = _girlName;
         }
-        string memory lastname_ = peoples[_firstParentID].lastname;
+        string memory lastname_ = _peoples[_firstParentID].lastname;
         _mintHuman(_totalSupply, gender, name_, lastname_, 0);
     }
 }
