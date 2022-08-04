@@ -214,9 +214,10 @@ contract Family is ERC721, Ownable {
     function checkAgeChanging(uint256 _id) public returns (uint256) {
         require(_humanToOwner[_id] == msg.sender, "You are not the owner of this NFT");
         _peoples[_id].actualAge = (block.timestamp - _peoples[_id].mintTime) / 86400 + _peoples[_id].mintAge;
-        if (_peoples[_id].gender == GENDER.KID_BOY && _peoples[_id].actualAge >= _maturityAge) {
+        uint256 actualAge = _peoples[_id].actualAge;
+        if (_peoples[_id].gender == GENDER.KID_BOY && actualAge >= _maturityAge) {
             _peoples[_id].gender = GENDER.MAN;
-        } else if (_peoples[_id].gender == GENDER.KID_GIRL && _peoples[_id].actualAge >= _maturityAge) {
+        } else if (_peoples[_id].gender == GENDER.KID_GIRL && actualAge >= _maturityAge) {
             _peoples[_id].gender = GENDER.WOMEN;
         }
         emit AgeUpdated(
@@ -229,7 +230,7 @@ contract Family is ERC721, Ownable {
             _peoples[_id].mintTime,
             msg.sender
         );
-        return _peoples[_id].actualAge;
+        return actualAge;
     }
 
     /**
