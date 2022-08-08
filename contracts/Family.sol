@@ -98,9 +98,9 @@ contract Family is ERC721, Ownable {
 
     /**
      * @dev Emitted when the holder updates the maturity age for the tokens
-     * @param newMaturityAger new _maturityAge
+     * @param newMaturityAge new _maturityAge
      */
-    event MaturityAgeUpdated(uint256 newMaturityAger);
+    event MaturityAgeUpdated(uint256 newMaturityAge);
 
     /**
      * @dev Emitted when the owner updates the minted token price
