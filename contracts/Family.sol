@@ -31,15 +31,15 @@ contract Family is ERC721, Ownable {
         address owner;
     }
 
-    uint256 internal _mintPrice;
-    uint256 internal _totalSupply;
-    uint256 internal _maxSupply;
-    uint256 internal _maturityAge;
+    uint256 private _mintPrice;
+    uint256 private _totalSupply;
+    uint256 private _maxSupply;
+    uint256 private _maturityAge;
 
-    Human[] internal _peoples;
+    Human[] private _peoples;
 
-    mapping(uint256 => address) internal _humanToOwner;
-    mapping(address => uint256) internal _ownerHumanCount;
+    mapping(uint256 => address) private _humanToOwner;
+    mapping(address => uint256) private _ownerHumanCount;
 
     /**
      * @dev Emitted when new token minted
@@ -314,49 +314,49 @@ contract Family is ERC721, Ownable {
     /**
      * @dev Returns the data of the given token by passing the token id as a parameter
      */
-    function getDataAboutHuman(uint256 id_) external view returns (Human memory) {
+    function getDataAboutHuman(uint256 id_) public view returns (Human memory) {
         return _peoples[id_];
     }
 
     /**
      * @dev Returns count of 'Family' tokens by passing the address as a parameter
      */
-    function getCountOfHumans(address owner_) external view returns (uint256) {
+    function getCountOfHumans(address owner_) public view returns (uint256) {
         return _ownerHumanCount[owner_];
     }
 
     /**
      * @dev Returns address of the token owner by passing the token id as a parameter
      */
-    function getOwnerOfHuman(uint256 id_) external view returns (address) {
+    function getOwnerOfHuman(uint256 id_) public view returns (address) {
         return _humanToOwner[id_];
     }
 
     /**
      * @dev Returns the mint price when users call the mintHuman() function
      */
-    function getMintPrice() external view returns (uint256) {
+    function getMintPrice() public view returns (uint256) {
         return _mintPrice;
     }
 
     /**
      * @dev Returns the actual total supply so far
      */
-    function getTotalSupply() external view returns (uint256) {
+    function getTotalSupply() public view returns (uint256) {
         return _totalSupply;
     }
 
     /**
      * @dev Returns max supply
      */
-    function getMaxSupply() external view returns (uint256) {
+    function getMaxSupply() public view returns (uint256) {
         return _maxSupply;
     }
 
     /**
      * @dev Returns maturity age
      */
-    function getMaturityAge() external view returns (uint256) {
+    function getMaturityAge() public view returns (uint256) {
         return _maturityAge;
     }
 }
