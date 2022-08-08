@@ -36,10 +36,10 @@ contract MockedFamily is Family {
         string memory womanName_,
         string memory lastname_
     ) external payable override {
-        require(msg.value >= _mintPrice, "Not enough ether for a mint");
-        require(_totalSupply < _maxSupply, "Collection sold out");
+        require(msg.value >= getMintPrice(), "Not enough ether for a mint");
+        require(getTotalSupply() < getMaxSupply(), "Collection sold out");
         uint256 random;
-        if (_ownerHumanCount[msg.sender] == 0) {
+        if (getCountOfHumans(msg.sender) == 0) {
             random = 0;
         } else random = 1;
         GENDER gender;
@@ -52,7 +52,7 @@ contract MockedFamily is Family {
             name_ = womanName_;
         }
 
-        _mintHuman(_totalSupply, gender, name_, lastname_, _maturityAge);
+        _mintHuman(getTotalSupply(), gender, name_, lastname_, getMaturityAge());
     }
 
     /**
@@ -70,10 +70,10 @@ contract MockedFamily is Family {
         string memory _boyName,
         string memory _girlName
     ) external override {
-        require(_totalSupply < _maxSupply, "Collection sold out");
+        require(getTotalSupply() < getMaxSupply(), "Collection sold out");
         require(_firstParentID != _secondParentID, "One parent cannot reproduce alone");
         require(
-            _humanToOwner[_firstParentID] == msg.sender && _humanToOwner[_secondParentID] == msg.sender,
+            getOwnerOfHuman(_firstParentID) == msg.sender && getOwnerOfHuman(_secondParentID) == msg.sender,
             "You are not the owner of one or more humans"
         );
         require(
@@ -81,11 +81,11 @@ contract MockedFamily is Family {
             "One or more of your tokens are not mature enough"
         );
         require(
-            (_peoples[_firstParentID].gender) != (_peoples[_secondParentID].gender),
+            (getDataAboutHuman(_firstParentID).gender) != (getDataAboutHuman(_secondParentID).gender),
             "Tokens share the same gender and cannot reproduce themselves"
         );
         uint256 random;
-        if (_ownerHumanCount[msg.sender] != 3) {
+        if (getCountOfHumans(msg.sender) != 3) {
             random = 0;
         } else random = 1;
         GENDER gender;
@@ -97,7 +97,7 @@ contract MockedFamily is Family {
             gender = GENDER.KID_GIRL;
             name_ = _girlName;
         }
-        string memory lastname_ = _peoples[_firstParentID].lastname;
-        _mintHuman(_totalSupply, gender, name_, lastname_, 0);
+        string memory lastname_ = getDataAboutHuman(_firstParentID).lastname;
+        _mintHuman(getTotalSupply(), gender, name_, lastname_, 0);
     }
 }
