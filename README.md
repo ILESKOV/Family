@@ -1,12 +1,14 @@
 # 👪 'Family' NFT collection 👫
 > There is one contract Family.sol with ERC721 standard implementation. Collection has 4 types of tokens: MAN, WOMAN, KID_BOY and KID_GIRL
+
+
 ## 📁 Table of Contents
-* [General Info](#general-information)
-* [Technologies Used](#technologies-used)
-* [Features](#features)
-* [Requirements For Initial Setup](#requirements)
-* [Setup](#setup)
-* [Contact](#contact)
+* [General Info](#-general-information)
+* [Technologies Used](#-technologies-used)
+* [Features](#-features)
+* [Requirements For Initial Setup](#-requirements-for-initial-setup)
+* [Setup](#-setup)
+* [Contact](#-contact)
 
 
 
