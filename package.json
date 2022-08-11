@@ -13,7 +13,8 @@
         "verifyMainnet": "npx hardhat verify --network ethereum --contract contracts/Family.sol:Family --constructor-args helpers/arguments.js [Family.sol address]",
         "docgen": "npx hardhat docgen",
         "slither": "slither .",
-        "solhint": "solhint 'contracts/**/*.sol'"
+        "solhint": "solhint 'contracts/**/*.sol'",
+        "size": "npx hardhat size-contracts"
     },
     "repository": {
         "type": "git",
@@ -44,6 +45,8 @@
         "@nomiclabs/hardhat-waffle": "^2.0.3",
         "@openzeppelin/contracts": "^4.7.0",
         "dotenv": "^16.0.1",
+        "hardhat-contract-sizer": "^2.6.1",
         "solidity-docgen": "^0.6.0-beta.22"
     }
 }
+
