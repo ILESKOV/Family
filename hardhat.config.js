@@ -4,6 +4,7 @@ require("@nomiclabs/hardhat-etherscan")
 require("solidity-coverage")
 require("dotenv").config()
 require("solidity-docgen")
+require("hardhat-contract-sizer")
 
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
     const accounts = await hre.ethers.getSigners()
@@ -22,6 +23,13 @@ module.exports = {
                 runs: 200,
             },
         },
+    },
+    contractSizer: {
+        alphaSort: false,
+        disambiguatePaths: true,
+        runOnCompile: true,
+        strict: false,
+        only: [],
     },
     networks: {
         hardhat: {
