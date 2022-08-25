@@ -3,7 +3,7 @@
 ## Family
 
 _According to this contract one day equals one year, so each day each
-contract will be a year older_
+contract will be a year older._
 
 ### GENDER
 
@@ -79,17 +79,17 @@ mapping(address => uint256) _ownerHumanCount
 event NewHuman(uint256 id, enum Family.GENDER gender, string name, string lastname, uint256 age, uint32 mintTime, address owner)
 ```
 
-_Emitted when new token minted_
+_Emitted when new token minted._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| id | uint256 | token Id |
-| gender | enum Family.GENDER | GENDER type(MAN, WOMEN, KID_BOY or KID_GIRL) |
-| name | string | given name of human |
-| lastname | string | given lastname of human |
-| age | uint256 | age of human at the moment of mint |
-| mintTime | uint32 | block.timestamp of mint |
-| owner | address | address of the owner of the tokens |
+| id | uint256 | token Id. |
+| gender | enum Family.GENDER | GENDER type(MAN, WOMEN, KID_BOY or KID_GIRL). |
+| name | string | given name of human. |
+| lastname | string | given lastname of human. |
+| age | uint256 | age of human at the moment of mint. |
+| mintTime | uint32 | block.timestamp of mint. |
+| owner | address | address of the owner of the tokens. |
 
 ### AgeUpdated
 
@@ -97,18 +97,18 @@ _Emitted when new token minted_
 event AgeUpdated(uint256 id, enum Family.GENDER gender, string name, string lastname, uint256 actualAge, uint256 mintAge, uint256 mintTime, address owner)
 ```
 
-_Emitted when checkAgeChanging called_
+_Emitted when checkAgeChanging called._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| id | uint256 | token Id |
-| gender | enum Family.GENDER | GENDER type(MAN, WOMEN, KID_BOY or KID_GIRL) |
-| name | string | given name of human |
-| lastname | string | given lastname of human |
-| actualAge | uint256 | age at the time the function was called |
-| mintAge | uint256 | age of human at the moment of mint |
-| mintTime | uint256 | block.timestamp of mint |
-| owner | address | address of the owner of the tokens |
+| id | uint256 | token Id. |
+| gender | enum Family.GENDER | GENDER type(MAN, WOMEN, KID_BOY or KID_GIRL). |
+| name | string | given name of human. |
+| lastname | string | given lastname of human. |
+| actualAge | uint256 | age at the time the function was called. |
+| mintAge | uint256 | age of human at the moment of mint. |
+| mintTime | uint256 | block.timestamp of mint. |
+| owner | address | address of the owner of the tokens. |
 
 ### WithdrawalOfOwner
 
@@ -116,12 +116,12 @@ _Emitted when checkAgeChanging called_
 event WithdrawalOfOwner(address owner, uint256 amount)
 ```
 
-_Emitted when the owner withdraw ether from the contract_
+_Emitted when the owner withdraw ether from the contract._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| owner | address | owner address |
-| amount | uint256 | amount of ether |
+| owner | address | owner address. |
+| amount | uint256 | amount of ether. |
 
 ### MaxSupplyUpdated
 
@@ -129,11 +129,11 @@ _Emitted when the owner withdraw ether from the contract_
 event MaxSupplyUpdated(uint256 newMaxSupply)
 ```
 
-_Emitted when the owner updates max supply_
+_Emitted when the owner updates max supply._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| newMaxSupply | uint256 | new _maxSupply |
+| newMaxSupply | uint256 | new _maxSupply. |
 
 ### MaturityAgeUpdated
 
@@ -141,11 +141,11 @@ _Emitted when the owner updates max supply_
 event MaturityAgeUpdated(uint256 newMaturityAge)
 ```
 
-_Emitted when the holder updates the maturity age for the tokens_
+_Emitted when the holder updates the maturity age for the tokens._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| newMaturityAge | uint256 | new _maturityAge |
+| newMaturityAge | uint256 | new _maturityAge. |
 
 ### MintPriceUpdated
 
@@ -153,11 +153,11 @@ _Emitted when the holder updates the maturity age for the tokens_
 event MintPriceUpdated(uint256 newMintPrice)
 ```
 
-_Emitted when the owner updates the minted token price_
+_Emitted when the owner updates the minted token price._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| newMintPrice | uint256 | new _maturityAge |
+| newMintPrice | uint256 | new _maturityAge. |
 
 ### constructor
 
@@ -166,13 +166,13 @@ constructor(uint256 mintPrice_, uint256 maxSupply_, uint256 maturityAge_) public
 ```
 
 _Contract inherited from ERC721 openZeppelin contract and contains
-arguments for creating a collection of ERC721 tokens_
+arguments for creating a collection of ERC721 tokens._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| mintPrice_ | uint256 | initial mint price for mintHuman() |
-| maxSupply_ | uint256 | initial max Supply for tokens |
-| maturityAge_ | uint256 | initial maturity age for tokens at which a breeding() function can be called |
+| mintPrice_ | uint256 | initial mint price for mintHuman(). |
+| maxSupply_ | uint256 | initial max Supply for tokens. |
+| maturityAge_ | uint256 | initial maturity age for tokens at which a breeding() function can be called. |
 
 ### mintHuman
 
@@ -180,8 +180,8 @@ arguments for creating a collection of ERC721 tokens_
 function mintHuman(string manName_, string womanName_, string lastname_) external payable virtual
 ```
 
-_This is a function to mint MAN or WOMAN tokens dependig on randomness
-The mint costs ether and the price of the mint is set by the owner
+_This is a function to mint MAN or WOMAN tokens dependig on randomness.
+The mint costs ether and the price of the mint is set by the owner.
 
 Requirements:
 
@@ -190,9 +190,9 @@ Requirements:
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| manName_ | string | The human token name if it will be randomly minted as a MAN token |
-| womanName_ | string | The human token name if it will be randomly minted as a WOMAN token |
-| lastname_ | string | The human token lastname Emits a {NewHuman} event. |
+| manName_ | string | The human token name if it will be randomly minted as a MAN token. |
+| womanName_ | string | The human token name if it will be randomly minted as a WOMAN token. |
+| lastname_ | string | The human token lastname. Emits a {NewHuman} event. |
 
 ### breeding
 
@@ -200,8 +200,8 @@ Requirements:
 function breeding(uint256 _firstParentID, uint256 _secondParentID, string _boyName, string _girlName) external virtual
 ```
 
-_This is a function to mint KID_BOY or KID_GIRL tokens depending on randomness
-In order to call this function user required to have MAN and WOMAN types of token
+_This is a function to mint KID_BOY or KID_GIRL tokens depending on randomness.
+In order to call this function user required to have MAN and WOMAN types of token.
 New KID token will have lastname from the first parent and initial age is set to 0.
 Mint does not require additional ether.
 
@@ -227,12 +227,12 @@ function checkAgeChanging(uint256 _id) public returns (uint256)
 ```
 
 _This is a function to check and update the actual age of a human token.
-Can only be called by the owner of the token
-Function update KID tokens to MAN or WOMEN in case they reach maturity age_
+Can only be called by the owner of the token.
+Function update KID tokens to MAN or WOMEN in case they reach maturity age._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| _id | uint256 | token id to check Emits a {AgeUpdated} event. |
+| _id | uint256 | token id to check. Emits a {AgeUpdated} event. |
 
 ### _mintHuman
 
@@ -245,11 +245,11 @@ functions. Updates mappings, adds token data to _peoples[] array._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| tokenId_ | uint256 | id of new token |
-| gender_ | enum Family.GENDER | randomly selected token gender |
-| name_ | string | The human token name |
-| lastname_ | string | The human token lastname |
-| age_ | uint256 | actual and mint age of the token Emits a {NewHuman} event. |
+| tokenId_ | uint256 | id of new token. |
+| gender_ | enum Family.GENDER | randomly selected token gender. |
+| name_ | string | The human token name. |
+| lastname_ | string | The human token lastname. |
+| age_ | uint256 | actual and mint age of the token. Emits a {NewHuman} event. |
 
 ### setMaxSupply
 
@@ -258,11 +258,11 @@ function setMaxSupply(uint256 maxSupply_) external
 ```
 
 _Set new _maxSupply. new max Supply required to be equal or higher
-than _totalSupply. Can only be called by the owner of the contract_
+than _totalSupply. Can only be called by the owner of the contract._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| maxSupply_ | uint256 | new max Supply of tokens Emits a {MaxSupplyUpdated} event. |
+| maxSupply_ | uint256 | new max Supply of tokens. Emits a {MaxSupplyUpdated} event. |
 
 ### setMaturityAge
 
@@ -271,11 +271,11 @@ function setMaturityAge(uint256 maturityAge_) external
 ```
 
 _Set new _maturityAge. When the age of maturity reached by KID tokens, they
- becomes MAN or WOMAN tokens. Can only be called by the owner of the contract_
+ becomes MAN or WOMAN tokens. Can only be called by the owner of the contract._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| maturityAge_ | uint256 | new age of maturity Emits a {MaturityAgeUpdated} event. |
+| maturityAge_ | uint256 | new age of maturity. Emits a {MaturityAgeUpdated} event. |
 
 ### setMintPrice
 
@@ -284,11 +284,11 @@ function setMintPrice(uint256 newMintPrice_) external
 ```
 
 _Set new _mintPrice. Users are required to pay this price whenever they want
- call mintHuman() function. Can only be called by the owner of the contract_
+ call mintHuman() function. Can only be called by the owner of the contract._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| newMintPrice_ | uint256 | new mint human price Emits a {MintPriceUpdated} event |
+| newMintPrice_ | uint256 | new mint human price. Emits a {MintPriceUpdated} event. |
 
 ### withdrawETH
 
@@ -296,9 +296,9 @@ _Set new _mintPrice. Users are required to pay this price whenever they want
 function withdrawETH(uint256 amount) external
 ```
 
-_Owner can withdraw Ether from contract
+_Owner can withdraw Ether from contract.
 
-Emits a {WithdrawalOfOwner} event_
+Emits a {WithdrawalOfOwner} event._
 
 ### getDataAboutHuman
 
@@ -306,7 +306,7 @@ Emits a {WithdrawalOfOwner} event_
 function getDataAboutHuman(uint256 id_) public view returns (struct Family.Human)
 ```
 
-_Returns the data of the given token by passing the token id as a parameter_
+_Returns the data of the given token by passing the token id as a parameter._
 
 ### getCountOfHumans
 
@@ -314,7 +314,7 @@ _Returns the data of the given token by passing the token id as a parameter_
 function getCountOfHumans(address owner_) public view returns (uint256)
 ```
 
-_Returns count of 'Family' tokens by passing the address as a parameter_
+_Returns count of 'Family' tokens by passing the address as a parameter._
 
 ### getOwnerOfHuman
 
@@ -322,7 +322,7 @@ _Returns count of 'Family' tokens by passing the address as a parameter_
 function getOwnerOfHuman(uint256 id_) public view returns (address)
 ```
 
-_Returns address of the token owner by passing the token id as a parameter_
+_Returns address of the token owner by passing the token id as a parameter._
 
 ### getMintPrice
 
@@ -330,7 +330,7 @@ _Returns address of the token owner by passing the token id as a parameter_
 function getMintPrice() public view returns (uint256)
 ```
 
-_Returns the mint price when users call the mintHuman() function_
+_Returns the mint price when users call the mintHuman() function._
 
 ### getTotalSupply
 
@@ -338,7 +338,7 @@ _Returns the mint price when users call the mintHuman() function_
 function getTotalSupply() public view returns (uint256)
 ```
 
-_Returns the actual total supply so far_
+_Returns the actual total supply so far._
 
 ### getMaxSupply
 
@@ -346,7 +346,7 @@ _Returns the actual total supply so far_
 function getMaxSupply() public view returns (uint256)
 ```
 
-_Returns max supply_
+_Returns max supply._
 
 ### getMaturityAge
 
@@ -354,7 +354,7 @@ _Returns max supply_
 function getMaturityAge() public view returns (uint256)
 ```
 
-_Returns maturity age_
+_Returns maturity age._
 
 ## MockedFamily
 
