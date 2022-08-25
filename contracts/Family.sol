@@ -5,12 +5,12 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
- * @title Family contract
+ * @title Family contract.
  * NOTE: Contract allows users to mint standard ERC 721 tokens of type MAN or WOMAN,
  * after that, the user can create a KID token, when the KID token reaches maturity,
- * they become adults MAN or WOMAN
+ * they become adults MAN or WOMAN.
  * @dev According to this contract one day equals one year, so each day each
- * contract will be a year older
+ * contract will be a year older.
  */
 contract Family is ERC721, Ownable {
     enum GENDER {
@@ -38,20 +38,20 @@ contract Family is ERC721, Ownable {
 
     Human[] private _peoples;
 
-    // Mapping from token ID to owner address
+    // Mapping from token ID to owner address.
     mapping(uint256 => address) private _humanToOwner;
-    // Mapping from owner address to count of owner tokens
+    // Mapping from owner address to count of owner tokens.
     mapping(address => uint256) private _ownerHumanCount;
 
     /**
-     * @dev Emitted when new token minted
-     * @param id token Id
-     * @param gender GENDER type(MAN, WOMEN, KID_BOY or KID_GIRL)
-     * @param name given name of human
-     * @param lastname given lastname of human
-     * @param age age of human at the moment of mint
-     * @param mintTime block.timestamp of mint
-     * @param owner address of the owner of the tokens
+     * @dev Emitted when new token minted.
+     * @param id token Id.
+     * @param gender GENDER type(MAN, WOMEN, KID_BOY or KID_GIRL).
+     * @param name given name of human.
+     * @param lastname given lastname of human.
+     * @param age age of human at the moment of mint.
+     * @param mintTime block.timestamp of mint.
+     * @param owner address of the owner of the tokens.
      */
     event NewHuman(
         uint256 id,
@@ -64,15 +64,15 @@ contract Family is ERC721, Ownable {
     );
 
     /**
-     * @dev Emitted when checkAgeChanging called
-     * @param id token Id
-     * @param gender GENDER type(MAN, WOMEN, KID_BOY or KID_GIRL)
-     * @param name given name of human
-     * @param lastname given lastname of human
-     * @param actualAge age at the time the function was called
-     * @param mintAge age of human at the moment of mint
-     * @param mintTime block.timestamp of mint
-     * @param owner address of the owner of the tokens
+     * @dev Emitted when checkAgeChanging called.
+     * @param id token Id.
+     * @param gender GENDER type(MAN, WOMEN, KID_BOY or KID_GIRL).
+     * @param name given name of human.
+     * @param lastname given lastname of human.
+     * @param actualAge age at the time the function was called.
+     * @param mintAge age of human at the moment of mint.
+     * @param mintTime block.timestamp of mint.
+     * @param owner address of the owner of the tokens.
      */
     event AgeUpdated(
         uint256 id,
@@ -86,37 +86,37 @@ contract Family is ERC721, Ownable {
     );
 
     /**
-     * @dev Emitted when the owner withdraw ether from the contract
-     * @param owner owner address
-     * @param amount amount of ether
+     * @dev Emitted when the owner withdraw ether from the contract.
+     * @param owner owner address.
+     * @param amount amount of ether.
      */
     event WithdrawalOfOwner(address owner, uint256 indexed amount);
 
     /**
-     * @dev Emitted when the owner updates max supply
-     * @param newMaxSupply new _maxSupply
+     * @dev Emitted when the owner updates max supply.
+     * @param newMaxSupply new _maxSupply.
      */
     event MaxSupplyUpdated(uint256 newMaxSupply);
 
     /**
-     * @dev Emitted when the holder updates the maturity age for the tokens
-     * @param newMaturityAge new _maturityAge
+     * @dev Emitted when the holder updates the maturity age for the tokens.
+     * @param newMaturityAge new _maturityAge.
      */
     event MaturityAgeUpdated(uint256 newMaturityAge);
 
     /**
-     * @dev Emitted when the owner updates the minted token price
-     * @param newMintPrice new _maturityAge
+     * @dev Emitted when the owner updates the minted token price.
+     * @param newMintPrice new _maturityAge.
      */
     event MintPriceUpdated(uint256 newMintPrice);
 
     /**
      * @dev Contract inherited from ERC721 openZeppelin contract and contains
-     * arguments for creating a collection of ERC721 tokens
-     * @param mintPrice_ initial mint price for mintHuman()
-     * @param maxSupply_ initial max Supply for tokens
+     * arguments for creating a collection of ERC721 tokens.
+     * @param mintPrice_ initial mint price for mintHuman().
+     * @param maxSupply_ initial max Supply for tokens.
      * @param maturityAge_ initial maturity age for tokens at which a breeding()
-     * function can be called
+     * function can be called.
      */
     constructor(
         uint256 mintPrice_,
@@ -132,17 +132,17 @@ contract Family is ERC721, Ownable {
     }
 
     /**
-     * @dev This is a function to mint MAN or WOMAN tokens dependig on randomness
-     * The mint costs ether and the price of the mint is set by the owner
+     * @dev This is a function to mint MAN or WOMAN tokens dependig on randomness.
+     * The mint costs ether and the price of the mint is set by the owner.
      *
      * Requirements:
      *
      * - `msg.value` must be higher or equal to `_mintPrice`.
      * - Users can mint tokens until the `_maxSupply` value is reached.
      *
-     * @param manName_ The human token name if it will be randomly minted as a MAN token
-     * @param womanName_ The human token name if it will be randomly minted as a WOMAN token
-     * @param lastname_ The human token lastname
+     * @param manName_ The human token name if it will be randomly minted as a MAN token.
+     * @param womanName_ The human token name if it will be randomly minted as a WOMAN token.
+     * @param lastname_ The human token lastname.
      *
      * Emits a {NewHuman} event.
      */
@@ -167,8 +167,8 @@ contract Family is ERC721, Ownable {
     }
 
     /**
-     * @dev This is a function to mint KID_BOY or KID_GIRL tokens depending on randomness
-     * In order to call this function user required to have MAN and WOMAN types of token
+     * @dev This is a function to mint KID_BOY or KID_GIRL tokens depending on randomness.
+     * In order to call this function user required to have MAN and WOMAN types of token.
      * New KID token will have lastname from the first parent and initial age is set to 0.
      * Mint does not require additional ether.
      *
@@ -225,9 +225,9 @@ contract Family is ERC721, Ownable {
 
     /**
      * @dev This is a function to check and update the actual age of a human token.
-     * Can only be called by the owner of the token
-     * Function update KID tokens to MAN or WOMEN in case they reach maturity age
-     * @param _id token id to check
+     * Can only be called by the owner of the token.
+     * Function update KID tokens to MAN or WOMEN in case they reach maturity age.
+     * @param _id token id to check.
      *
      * Emits a {AgeUpdated} event.
      */
@@ -256,11 +256,11 @@ contract Family is ERC721, Ownable {
     /**
      * @dev This function contains the common functionality of mintHuman() and breeding()
      * functions. Updates mappings, adds token data to _peoples[] array.
-     * @param tokenId_ id of new token
-     * @param gender_ randomly selected token gender
-     * @param name_ The human token name
-     * @param lastname_ The human token lastname
-     * @param age_ actual and mint age of the token
+     * @param tokenId_ id of new token.
+     * @param gender_ randomly selected token gender.
+     * @param name_ The human token name.
+     * @param lastname_ The human token lastname.
+     * @param age_ actual and mint age of the token.
      *
      * Emits a {NewHuman} event.
      */
@@ -293,8 +293,8 @@ contract Family is ERC721, Ownable {
 
     /**
      * @dev Set new _maxSupply. new max Supply required to be equal or higher
-     * than _totalSupply. Can only be called by the owner of the contract
-     * @param maxSupply_ new max Supply of tokens
+     * than _totalSupply. Can only be called by the owner of the contract.
+     * @param maxSupply_ new max Supply of tokens.
      *
      * Emits a {MaxSupplyUpdated} event.
      */
@@ -306,8 +306,8 @@ contract Family is ERC721, Ownable {
 
     /**
      * @dev Set new _maturityAge. When the age of maturity reached by KID tokens, they
-     *  becomes MAN or WOMAN tokens. Can only be called by the owner of the contract
-     * @param maturityAge_ new age of maturity
+     *  becomes MAN or WOMAN tokens. Can only be called by the owner of the contract.
+     * @param maturityAge_ new age of maturity.
      *
      * Emits a {MaturityAgeUpdated} event.
      */
@@ -319,10 +319,10 @@ contract Family is ERC721, Ownable {
 
     /**
      * @dev Set new _mintPrice. Users are required to pay this price whenever they want
-     *  call mintHuman() function. Can only be called by the owner of the contract
-     * @param newMintPrice_ new mint human price
+     *  call mintHuman() function. Can only be called by the owner of the contract.
+     * @param newMintPrice_ new mint human price.
      *
-     * Emits a {MintPriceUpdated} event
+     * Emits a {MintPriceUpdated} event.
      */
     function setMintPrice(uint256 newMintPrice_) external onlyOwner {
         _mintPrice = newMintPrice_;
@@ -330,9 +330,9 @@ contract Family is ERC721, Ownable {
     }
 
     /**
-     * @dev Owner can withdraw Ether from contract
+     * @dev Owner can withdraw Ether from contract.
      *
-     * Emits a {WithdrawalOfOwner} event
+     * Emits a {WithdrawalOfOwner} event.
      */
     function withdrawETH(uint256 amount) external onlyOwner {
         require(amount <= address(this).balance, "Not enough ETH");
@@ -341,49 +341,49 @@ contract Family is ERC721, Ownable {
     }
 
     /**
-     * @dev Returns the data of the given token by passing the token id as a parameter
+     * @dev Returns the data of the given token by passing the token id as a parameter.
      */
     function getDataAboutHuman(uint256 id_) public view returns (Human memory) {
         return _peoples[id_];
     }
 
     /**
-     * @dev Returns count of 'Family' tokens by passing the address as a parameter
+     * @dev Returns count of 'Family' tokens by passing the address as a parameter.
      */
     function getCountOfHumans(address owner_) public view returns (uint256) {
         return _ownerHumanCount[owner_];
     }
 
     /**
-     * @dev Returns address of the token owner by passing the token id as a parameter
+     * @dev Returns address of the token owner by passing the token id as a parameter.
      */
     function getOwnerOfHuman(uint256 id_) public view returns (address) {
         return _humanToOwner[id_];
     }
 
     /**
-     * @dev Returns the mint price when users call the mintHuman() function
+     * @dev Returns the mint price when users call the mintHuman() function.
      */
     function getMintPrice() public view returns (uint256) {
         return _mintPrice;
     }
 
     /**
-     * @dev Returns the actual total supply so far
+     * @dev Returns the actual total supply so far.
      */
     function getTotalSupply() public view returns (uint256) {
         return _totalSupply;
     }
 
     /**
-     * @dev Returns max supply
+     * @dev Returns max supply.
      */
     function getMaxSupply() public view returns (uint256) {
         return _maxSupply;
     }
 
     /**
-     * @dev Returns maturity age
+     * @dev Returns maturity age.
      */
     function getMaturityAge() public view returns (uint256) {
         return _maturityAge;
