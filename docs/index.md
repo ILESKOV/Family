@@ -55,10 +55,10 @@ uint256 _maxSupply
 uint256 _maturityAge
 ```
 
-### peoples
+### _peoples
 
 ```solidity
-struct Family.Human[] peoples
+struct Family.Human[] _peoples
 ```
 
 ### _humanToOwner
@@ -138,14 +138,14 @@ _Emitted when the owner updates max supply_
 ### MaturityAgeUpdated
 
 ```solidity
-event MaturityAgeUpdated(uint256 newMaturityAger)
+event MaturityAgeUpdated(uint256 newMaturityAge)
 ```
 
 _Emitted when the holder updates the maturity age for the tokens_
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| newMaturityAger | uint256 | new _maturityAge |
+| newMaturityAge | uint256 | new _maturityAge |
 
 ### MintPriceUpdated
 
@@ -181,15 +181,18 @@ function mintHuman(string manName_, string womanName_, string lastname_) externa
 ```
 
 _This is a function to mint MAN or WOMAN tokens dependig on randomness
-Each user can mint as many tokens as they want until the maximum supply is reached
 The mint costs ether and the price of the mint is set by the owner
-_mintHuman() function emitted a newHuman event_
+
+Requirements:
+
+- `msg.value` must be higher or equal to `_mintPrice`.
+- Users can mint tokens until the `_maxSupply` value is reached._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | manName_ | string | The human token name if it will be randomly minted as a MAN token |
 | womanName_ | string | The human token name if it will be randomly minted as a WOMAN token |
-| lastname_ | string | The human token lastname |
+| lastname_ | string | The human token lastname Emits a {NewHuman} event. |
 
 ### breeding
 
@@ -197,18 +200,25 @@ _mintHuman() function emitted a newHuman event_
 function breeding(uint256 _firstParentID, uint256 _secondParentID, string _boyName, string _girlName) external virtual
 ```
 
-_This is a function to mint KID_BOY or KID_GIRL tokens dependig on randomness
-Each user can mint as many tokens as they want until the maximum supply is reached
+_This is a function to mint KID_BOY or KID_GIRL tokens depending on randomness
 In order to call this function user required to have MAN and WOMAN types of token
 New KID token will have lastname from the first parent and initial age is set to 0.
-Mint does not require additional ether. _mintHuman() function emitted a newHuman event_
+Mint does not require additional ether.
+
+Requirements:
+
+- Users can breed tokens until the `_maxSupply` value is reached.
+- `_firstParentID` and `_secondParentID` must be different values.
+- `_humanToOwner[_firstParentID]` and `_humanToOwner[_secondParentID]` must be `msg.sender` address.
+- `_firstParentID` and `_secondParentID` Humans `actualAge` must reach `_maturityAge`.
+- `_peoples[_firstParentID].gender` and `_peoples[_secondParentID].gender` must be different values._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| _firstParentID | uint256 | id of first parent token |
-| _secondParentID | uint256 | id of second parent token |
-| _boyName | string | The human token name if it will be randomly minted as a KID_BOY token |
-| _girlName | string | The human token name if it will be randomly minted as a KID_GIRL token |
+| _firstParentID | uint256 | id of first parent token. |
+| _secondParentID | uint256 | id of second parent token. |
+| _boyName | string | The human token name if it will be randomly minted as a KID_BOY token. |
+| _girlName | string | The human token name if it will be randomly minted as a KID_GIRL token. Emits a {NewHuman} event. |
 
 ### checkAgeChanging
 
@@ -222,7 +232,7 @@ Function update KID tokens to MAN or WOMEN in case they reach maturity age_
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| _id | uint256 | token id to check |
+| _id | uint256 | token id to check Emits a {AgeUpdated} event. |
 
 ### _mintHuman
 
@@ -231,8 +241,7 @@ function _mintHuman(uint256 tokenId_, enum Family.GENDER gender_, string name_, 
 ```
 
 _This function contains the common functionality of mintHuman() and breeding()
-functions. Updates mappings, adds token data to peoples[] array.
-NewHuman event emitted_
+functions. Updates mappings, adds token data to _peoples[] array._
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
@@ -240,7 +249,7 @@ NewHuman event emitted_
 | gender_ | enum Family.GENDER | randomly selected token gender |
 | name_ | string | The human token name |
 | lastname_ | string | The human token lastname |
-| age_ | uint256 | actual and mint age of the token |
+| age_ | uint256 | actual and mint age of the token Emits a {NewHuman} event. |
 
 ### setMaxSupply
 
@@ -253,7 +262,7 @@ than _totalSupply. Can only be called by the owner of the contract_
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| maxSupply_ | uint256 | new max Supply of tokens |
+| maxSupply_ | uint256 | new max Supply of tokens Emits a {MaxSupplyUpdated} event. |
 
 ### setMaturityAge
 
@@ -266,7 +275,7 @@ _Set new _maturityAge. When the age of maturity reached by KID tokens, they
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| maturityAge_ | uint256 | new age of maturity |
+| maturityAge_ | uint256 | new age of maturity Emits a {MaturityAgeUpdated} event. |
 
 ### setMintPrice
 
@@ -279,7 +288,7 @@ _Set new _mintPrice. Users are required to pay this price whenever they want
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| newMintPrice_ | uint256 | new mint human price |
+| newMintPrice_ | uint256 | new mint human price Emits a {MintPriceUpdated} event |
 
 ### withdrawETH
 
@@ -287,12 +296,14 @@ _Set new _mintPrice. Users are required to pay this price whenever they want
 function withdrawETH(uint256 amount) external
 ```
 
-_Owner can withdraw Ether from contract_
+_Owner can withdraw Ether from contract
+
+Emits a {WithdrawalOfOwner} event_
 
 ### getDataAboutHuman
 
 ```solidity
-function getDataAboutHuman(uint256 id_) external view returns (struct Family.Human)
+function getDataAboutHuman(uint256 id_) public view returns (struct Family.Human)
 ```
 
 _Returns the data of the given token by passing the token id as a parameter_
@@ -300,7 +311,7 @@ _Returns the data of the given token by passing the token id as a parameter_
 ### getCountOfHumans
 
 ```solidity
-function getCountOfHumans(address owner_) external view returns (uint256)
+function getCountOfHumans(address owner_) public view returns (uint256)
 ```
 
 _Returns count of 'Family' tokens by passing the address as a parameter_
@@ -308,7 +319,7 @@ _Returns count of 'Family' tokens by passing the address as a parameter_
 ### getOwnerOfHuman
 
 ```solidity
-function getOwnerOfHuman(uint256 id_) external view returns (address)
+function getOwnerOfHuman(uint256 id_) public view returns (address)
 ```
 
 _Returns address of the token owner by passing the token id as a parameter_
@@ -316,7 +327,7 @@ _Returns address of the token owner by passing the token id as a parameter_
 ### getMintPrice
 
 ```solidity
-function getMintPrice() external view returns (uint256)
+function getMintPrice() public view returns (uint256)
 ```
 
 _Returns the mint price when users call the mintHuman() function_
@@ -324,7 +335,7 @@ _Returns the mint price when users call the mintHuman() function_
 ### getTotalSupply
 
 ```solidity
-function getTotalSupply() external view returns (uint256)
+function getTotalSupply() public view returns (uint256)
 ```
 
 _Returns the actual total supply so far_
@@ -332,7 +343,7 @@ _Returns the actual total supply so far_
 ### getMaxSupply
 
 ```solidity
-function getMaxSupply() external view returns (uint256)
+function getMaxSupply() public view returns (uint256)
 ```
 
 _Returns max supply_
@@ -340,7 +351,7 @@ _Returns max supply_
 ### getMaturityAge
 
 ```solidity
-function getMaturityAge() external view returns (uint256)
+function getMaturityAge() public view returns (uint256)
 ```
 
 _Returns maturity age_
