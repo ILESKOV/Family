@@ -38,7 +38,9 @@ contract Family is ERC721, Ownable {
 
     Human[] private _peoples;
 
+    // Mapping from token ID to owner address
     mapping(uint256 => address) private _humanToOwner;
+    // Mapping from owner address to count of owner tokens
     mapping(address => uint256) private _ownerHumanCount;
 
     /**
@@ -131,12 +133,18 @@ contract Family is ERC721, Ownable {
 
     /**
      * @dev This is a function to mint MAN or WOMAN tokens dependig on randomness
-     * Each user can mint as many tokens as they want until the maximum supply is reached
      * The mint costs ether and the price of the mint is set by the owner
-     * _mintHuman() function emitted a newHuman event
+     *
+     * Requirements:
+     *
+     * - `msg.value` must be higher or equal to `_mintPrice`.
+     * - Users can mint tokens until the `_maxSupply` value is reached.
+     *
      * @param manName_ The human token name if it will be randomly minted as a MAN token
      * @param womanName_ The human token name if it will be randomly minted as a WOMAN token
      * @param lastname_ The human token lastname
+     *
+     * Emits a {NewHuman} event.
      */
     function mintHuman(
         string memory manName_,
@@ -159,15 +167,25 @@ contract Family is ERC721, Ownable {
     }
 
     /**
-     * @dev This is a function to mint KID_BOY or KID_GIRL tokens dependig on randomness
-     * Each user can mint as many tokens as they want until the maximum supply is reached
+     * @dev This is a function to mint KID_BOY or KID_GIRL tokens depending on randomness
      * In order to call this function user required to have MAN and WOMAN types of token
      * New KID token will have lastname from the first parent and initial age is set to 0.
-     * Mint does not require additional ether. _mintHuman() function emitted a newHuman event
-     * @param _firstParentID id of first parent token
-     * @param _secondParentID id of second parent token
-     * @param _boyName The human token name if it will be randomly minted as a KID_BOY token
-     * @param _girlName The human token name if it will be randomly minted as a KID_GIRL token
+     * Mint does not require additional ether.
+     *
+     * Requirements:
+     *
+     * - Users can breed tokens until the `_maxSupply` value is reached.
+     * - `_firstParentID` and `_secondParentID` must be different values.
+     * - `_humanToOwner[_firstParentID]` and `_humanToOwner[_secondParentID]` must be `msg.sender` address.
+     * - `_firstParentID` and `_secondParentID` Humans `actualAge` must reach `_maturityAge`.
+     * - `_peoples[_firstParentID].gender` and `_peoples[_secondParentID].gender` must be different values.
+     *
+     * @param _firstParentID id of first parent token.
+     * @param _secondParentID id of second parent token.
+     * @param _boyName The human token name if it will be randomly minted as a KID_BOY token.
+     * @param _girlName The human token name if it will be randomly minted as a KID_GIRL token.
+     *
+     * Emits a {NewHuman} event.
      */
     function breeding(
         uint256 _firstParentID,
@@ -210,6 +228,8 @@ contract Family is ERC721, Ownable {
      * Can only be called by the owner of the token
      * Function update KID tokens to MAN or WOMEN in case they reach maturity age
      * @param _id token id to check
+     *
+     * Emits a {AgeUpdated} event.
      */
     function checkAgeChanging(uint256 _id) public returns (uint256) {
         require(_humanToOwner[_id] == msg.sender, "You are not the owner of this NFT");
@@ -236,12 +256,13 @@ contract Family is ERC721, Ownable {
     /**
      * @dev This function contains the common functionality of mintHuman() and breeding()
      * functions. Updates mappings, adds token data to _peoples[] array.
-     * NewHuman event emitted
      * @param tokenId_ id of new token
      * @param gender_ randomly selected token gender
      * @param name_ The human token name
      * @param lastname_ The human token lastname
      * @param age_ actual and mint age of the token
+     *
+     * Emits a {NewHuman} event.
      */
     function _mintHuman(
         uint256 tokenId_,
@@ -274,6 +295,8 @@ contract Family is ERC721, Ownable {
      * @dev Set new _maxSupply. new max Supply required to be equal or higher
      * than _totalSupply. Can only be called by the owner of the contract
      * @param maxSupply_ new max Supply of tokens
+     *
+     * Emits a {MaxSupplyUpdated} event.
      */
     function setMaxSupply(uint256 maxSupply_) external onlyOwner {
         require(maxSupply_ >= _totalSupply, "Max supply cannot be lower than total supply");
@@ -285,6 +308,8 @@ contract Family is ERC721, Ownable {
      * @dev Set new _maturityAge. When the age of maturity reached by KID tokens, they
      *  becomes MAN or WOMAN tokens. Can only be called by the owner of the contract
      * @param maturityAge_ new age of maturity
+     *
+     * Emits a {MaturityAgeUpdated} event.
      */
     function setMaturityAge(uint256 maturityAge_) external onlyOwner {
         require(maturityAge_ >= 16, "Needs to be older");
@@ -296,6 +321,8 @@ contract Family is ERC721, Ownable {
      * @dev Set new _mintPrice. Users are required to pay this price whenever they want
      *  call mintHuman() function. Can only be called by the owner of the contract
      * @param newMintPrice_ new mint human price
+     *
+     * Emits a {MintPriceUpdated} event
      */
     function setMintPrice(uint256 newMintPrice_) external onlyOwner {
         _mintPrice = newMintPrice_;
@@ -304,6 +331,8 @@ contract Family is ERC721, Ownable {
 
     /**
      * @dev Owner can withdraw Ether from contract
+     *
+     * Emits a {WithdrawalOfOwner} event
      */
     function withdrawETH(uint256 amount) external onlyOwner {
         require(amount <= address(this).balance, "Not enough ETH");
