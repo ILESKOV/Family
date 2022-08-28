@@ -123,8 +123,8 @@ contract Family is ERC721, Ownable {
         uint256 maxSupply_,
         uint256 maturityAge_
     ) ERC721("Family", "FAM") {
-        require(mintPrice_ != 0, "Mint price cannot be zero");
-        require(maxSupply_ != 0, "Max supply cannot be zero");
+        require(mintPrice_ > 0, "Mint price cannot be zero");
+        require(maxSupply_ > 0, "Max supply cannot be zero");
         require(maturityAge_ > 16, "Maturity age must be higher than 16");
         _mintPrice = mintPrice_;
         _maxSupply = maxSupply_;
@@ -132,7 +132,7 @@ contract Family is ERC721, Ownable {
     }
 
     /**
-     * @dev This is a function to mint MAN or WOMAN tokens dependig on randomness.
+     * @dev This is a function to mint MAN or WOMAN tokens dependig on pseudo randomness.
      * The mint costs ether and the price of the mint is set by the owner.
      *
      * Requirements:
@@ -140,8 +140,8 @@ contract Family is ERC721, Ownable {
      * - `msg.value` must be higher or equal to `_mintPrice`.
      * - Users can mint tokens until the `_maxSupply` value is reached.
      *
-     * @param manName_ The human token name if it will be randomly minted as a MAN token.
-     * @param womanName_ The human token name if it will be randomly minted as a WOMAN token.
+     * @param manName_ The human token name if it will be pseudo randomly minted as a MAN token.
+     * @param womanName_ The human token name if it will be pseudo randomly minted as a WOMAN token.
      * @param lastname_ The human token lastname.
      *
      * Emits a {NewHuman} event.
@@ -152,14 +152,14 @@ contract Family is ERC721, Ownable {
         string memory lastname_
     ) external payable virtual {
         require(msg.value >= _mintPrice, "Not enough ether for a mint");
-        require(_totalSupply < _maxSupply, "Collection sold out");
-        uint256 random = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender))) % 2;
+        require(_totalSupply <= _maxSupply, "Collection sold out");
+        uint256 pseudoRandom = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender))) % 2;
         GENDER gender;
         string memory name_;
-        if (random == 0) {
+        if (pseudoRandom == 0) {
             gender = GENDER.MAN;
             name_ = manName_;
-        } else if (random != 0) {
+        } else {
             gender = GENDER.WOMEN;
             name_ = womanName_;
         }
@@ -167,7 +167,7 @@ contract Family is ERC721, Ownable {
     }
 
     /**
-     * @dev This is a function to mint KID_BOY or KID_GIRL tokens depending on randomness.
+     * @dev This is a function to mint KID_BOY or KID_GIRL tokens depending on pseudo randomness.
      * In order to call this function user required to have MAN and WOMAN types of token.
      * New KID token will have lastname from the first parent and initial age is set to 0.
      * Mint does not require additional ether.
@@ -182,8 +182,8 @@ contract Family is ERC721, Ownable {
      *
      * @param _firstParentID id of first parent token.
      * @param _secondParentID id of second parent token.
-     * @param _boyName The human token name if it will be randomly minted as a KID_BOY token.
-     * @param _girlName The human token name if it will be randomly minted as a KID_GIRL token.
+     * @param _boyName The human token name if it will be pseudo randomly minted as a KID_BOY token.
+     * @param _girlName The human token name if it will be pseudo randomly minted as a KID_GIRL token.
      *
      * Emits a {NewHuman} event.
      */
@@ -193,7 +193,7 @@ contract Family is ERC721, Ownable {
         string memory _boyName,
         string memory _girlName
     ) external virtual {
-        require(_totalSupply < _maxSupply, "Collection sold out");
+        require(_totalSupply <= _maxSupply, "Collection sold out");
         require(_firstParentID != _secondParentID, "One parent cannot reproduce alone");
         require(
             _humanToOwner[_firstParentID] == msg.sender && _humanToOwner[_secondParentID] == msg.sender,
@@ -203,23 +203,24 @@ contract Family is ERC721, Ownable {
             checkAgeChanging(_firstParentID) >= _maturityAge && checkAgeChanging(_secondParentID) == _maturityAge,
             "One or more of your tokens are not mature enough"
         );
+        Human memory firstParent = _peoples[_firstParentID];
         require(
-            (_peoples[_firstParentID].gender) != (_peoples[_secondParentID].gender),
+            (firstParent.gender) != (_peoples[_secondParentID].gender),
             "Tokens share the same gender and cannot reproduce themselves"
         );
-        uint256 random = uint256(
+        uint256 pseudoRandom = uint256(
             keccak256(abi.encodePacked(block.difficulty, block.timestamp, _boyName, _girlName, msg.sender))
         ) % 2;
         GENDER gender;
         string memory name_;
-        if (random == 0) {
+        if (pseudoRandom == 0) {
             gender = GENDER.KID_BOY;
             name_ = _boyName;
         } else {
             gender = GENDER.KID_GIRL;
             name_ = _girlName;
         }
-        string memory lastname_ = _peoples[_firstParentID].lastname;
+        string memory lastname_ = firstParent.lastname;
         _mintHuman(_totalSupply, gender, name_, lastname_, 0);
     }
 
@@ -233,21 +234,22 @@ contract Family is ERC721, Ownable {
      */
     function checkAgeChanging(uint256 _id) public returns (uint256) {
         require(_humanToOwner[_id] == msg.sender, "You are not the owner of this NFT");
-        _peoples[_id].actualAge = (block.timestamp - _peoples[_id].mintTime) / 86400 + _peoples[_id].mintAge;
+        Human memory human = _peoples[_id];
+        _peoples[_id].actualAge = (block.timestamp - human.mintTime) / 86400 + human.mintAge;
         uint256 actualAge = _peoples[_id].actualAge;
-        if (_peoples[_id].gender == GENDER.KID_BOY && actualAge >= _maturityAge) {
+        if (human.gender == GENDER.KID_BOY && actualAge >= _maturityAge) {
             _peoples[_id].gender = GENDER.MAN;
-        } else if (_peoples[_id].gender == GENDER.KID_GIRL && actualAge >= _maturityAge) {
+        } else if (human.gender == GENDER.KID_GIRL && actualAge >= _maturityAge) {
             _peoples[_id].gender = GENDER.WOMEN;
         }
         emit AgeUpdated(
             _id,
-            _peoples[_id].gender,
-            _peoples[_id].name,
-            _peoples[_id].lastname,
-            _peoples[_id].actualAge,
-            _peoples[_id].mintAge,
-            _peoples[_id].mintTime,
+            human.gender,
+            human.name,
+            human.lastname,
+            actualAge,
+            human.mintAge,
+            human.mintTime,
             msg.sender
         );
         return actualAge;
@@ -257,7 +259,7 @@ contract Family is ERC721, Ownable {
      * @dev This function contains the common functionality of mintHuman() and breeding()
      * functions. Updates mappings, adds token data to _peoples[] array.
      * @param tokenId_ id of new token.
-     * @param gender_ randomly selected token gender.
+     * @param gender_ pseudo randomly selected token gender.
      * @param name_ The human token name.
      * @param lastname_ The human token lastname.
      * @param age_ actual and mint age of the token.
@@ -271,10 +273,11 @@ contract Family is ERC721, Ownable {
         string memory lastname_,
         uint256 age_
     ) internal {
+        address caller = msg.sender;
         uint256 tokenId = _totalSupply;
-        _ownerHumanCount[msg.sender]++;
+        _ownerHumanCount[caller]++;
         _totalSupply++;
-        _humanToOwner[tokenId_] = msg.sender;
+        _humanToOwner[tokenId_] = caller;
         uint32 mintTime_ = uint32(block.timestamp);
         Human memory human = Human({
             id: tokenId,
@@ -284,11 +287,11 @@ contract Family is ERC721, Ownable {
             actualAge: age_,
             mintAge: age_,
             mintTime: mintTime_,
-            owner: msg.sender
+            owner: caller
         });
         _peoples.push(human);
-        _safeMint(msg.sender, tokenId_);
-        emit NewHuman(tokenId, gender_, name_, lastname_, age_, mintTime_, msg.sender);
+        _safeMint(caller, tokenId_);
+        emit NewHuman(tokenId, gender_, name_, lastname_, age_, mintTime_, caller);
     }
 
     /**
