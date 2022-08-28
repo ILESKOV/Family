@@ -59,24 +59,28 @@ $ npm run coverage
 
 ### 5. 🚀 Deploy to Rinkeby or Mainnet
 ```
-$ npm run deployRinkeby
+$ npm run rinkeby
 ``` 
 ```
-$ npm run deployMainnet 
+$ npm run mainnet
 ``` 
 
 ### 6. ✏️ Insert current contract address into package.json
+```
+"verify:rinkeby": "npx hardhat verify --network rinkeby --contract contracts/Family.sol:Family --constructor-args helpers/arguments.js <Family.sol address>",
+"verify:mainnet": "npx hardhat verify --network ethereum --contract contracts/Family.sol:Family --constructor-args helpers/arguments.js <Family.sol address]>"
+``` 
 ![Example screenshot](./helpers/Screenshot7.png)
 
 ### 7. 📜 Verify contracts
 ```
-$ npm run verifyRinkeby
+$ npm run verify:rinkeby
 ```
 
 or for mainnet
 
 ```
- $ npm run verifyMainnet
+ $ npm run verify:mainnet
 ```
 
 
