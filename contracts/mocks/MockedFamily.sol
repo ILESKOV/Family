@@ -32,9 +32,9 @@ contract MockedFamily is Family {
      * @param lastname_ The human token lastname
      */
     function mintHuman(
-        string memory manName_,
-        string memory womanName_,
-        string memory lastname_
+        bytes32 manName_,
+        bytes32 womanName_,
+        bytes32 lastname_
     ) external payable override {
         require(msg.value >= getMintPrice(), "Not enough ether for a mint");
         require(getTotalSupply() < getMaxSupply(), "Collection sold out");
@@ -43,7 +43,7 @@ contract MockedFamily is Family {
             random = 0;
         } else random = 1;
         GENDER gender;
-        string memory name_;
+        bytes32 name_;
         if (random == 0) {
             gender = GENDER.MAN;
             name_ = manName_;
@@ -67,8 +67,8 @@ contract MockedFamily is Family {
     function breeding(
         uint256 _firstParentID,
         uint256 _secondParentID,
-        string memory _boyName,
-        string memory _girlName
+        bytes32 _boyName,
+        bytes32 _girlName
     ) external override {
         require(getTotalSupply() < getMaxSupply(), "Collection sold out");
         require(_firstParentID != _secondParentID, "One parent cannot reproduce alone");
@@ -89,7 +89,7 @@ contract MockedFamily is Family {
             random = 0;
         } else random = 1;
         GENDER gender;
-        string memory name_;
+        bytes32 name_;
         if (random == 0) {
             gender = GENDER.KID_BOY;
             name_ = _boyName;
@@ -97,7 +97,7 @@ contract MockedFamily is Family {
             gender = GENDER.KID_GIRL;
             name_ = _girlName;
         }
-        string memory lastname_ = getDataAboutHuman(_firstParentID).lastname;
+        bytes32 lastname_ = getDataAboutHuman(_firstParentID).lastname;
         _mintHuman(getTotalSupply(), gender, name_, lastname_, 0);
     }
 }
