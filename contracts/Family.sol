@@ -23,8 +23,8 @@ contract Family is ERC721, Ownable {
     struct Human {
         uint256 id;
         GENDER gender;
-        string name;
-        string lastname;
+        bytes32 name;
+        bytes32 lastname;
         uint256 actualAge;
         uint256 mintAge;
         uint256 mintTime;
@@ -56,8 +56,8 @@ contract Family is ERC721, Ownable {
     event NewHuman(
         uint256 id,
         GENDER indexed gender,
-        string name,
-        string lastname,
+        bytes32 name,
+        bytes32 lastname,
         uint256 age,
         uint32 mintTime,
         address indexed owner
@@ -77,8 +77,8 @@ contract Family is ERC721, Ownable {
     event AgeUpdated(
         uint256 id,
         GENDER indexed gender,
-        string name,
-        string lastname,
+        bytes32 name,
+        bytes32 lastname,
         uint256 actualAge,
         uint256 mintAge,
         uint256 mintTime,
@@ -147,15 +147,15 @@ contract Family is ERC721, Ownable {
      * Emits a {NewHuman} event.
      */
     function mintHuman(
-        string memory manName_,
-        string memory womanName_,
-        string memory lastname_
+        bytes32 manName_,
+        bytes32 womanName_,
+        bytes32 lastname_
     ) external payable virtual {
         require(msg.value >= _mintPrice, "Not enough ether for a mint");
         require(_totalSupply <= _maxSupply, "Collection sold out");
         uint256 pseudoRandom = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender))) % 2;
         GENDER gender;
-        string memory name_;
+        bytes32 name_;
         if (pseudoRandom == 0) {
             gender = GENDER.MAN;
             name_ = manName_;
@@ -190,8 +190,8 @@ contract Family is ERC721, Ownable {
     function breeding(
         uint256 _firstParentID,
         uint256 _secondParentID,
-        string memory _boyName,
-        string memory _girlName
+        bytes32 _boyName,
+        bytes32 _girlName
     ) external virtual {
         require(_totalSupply <= _maxSupply, "Collection sold out");
         require(_firstParentID != _secondParentID, "One parent cannot reproduce alone");
@@ -212,7 +212,7 @@ contract Family is ERC721, Ownable {
             keccak256(abi.encodePacked(block.difficulty, block.timestamp, _boyName, _girlName, msg.sender))
         ) % 2;
         GENDER gender;
-        string memory name_;
+        bytes32 name_;
         if (pseudoRandom == 0) {
             gender = GENDER.KID_BOY;
             name_ = _boyName;
@@ -220,7 +220,7 @@ contract Family is ERC721, Ownable {
             gender = GENDER.KID_GIRL;
             name_ = _girlName;
         }
-        string memory lastname_ = firstParent.lastname;
+        bytes32 lastname_ = firstParent.lastname;
         _mintHuman(_totalSupply, gender, name_, lastname_, 0);
     }
 
@@ -269,8 +269,8 @@ contract Family is ERC721, Ownable {
     function _mintHuman(
         uint256 tokenId_,
         GENDER gender_,
-        string memory name_,
-        string memory lastname_,
+        bytes32 name_,
+        bytes32 lastname_,
         uint256 age_
     ) internal {
         address caller = msg.sender;
