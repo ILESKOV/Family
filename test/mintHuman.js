@@ -1,6 +1,7 @@
 const { expect } = require("chai")
 const { BigNumber } = require("ethers")
 const { ethers } = require("hardhat")
+const utils = ethers.utils
 
 describe("mintHuman tests", function () {
     beforeEach(async function () {
@@ -12,35 +13,78 @@ describe("mintHuman tests", function () {
         mockedFamily = await ethers.getContractFactory("MockedFamily", owner)
         MockedFamily = await mockedFamily.deploy("50000000000000000", 3, 18)
 
-        await Family.connect(wallet1).mintHuman("Bob", "Alice", "Wellingtone", {
-            value: ethers.utils.parseEther("0.05"),
-        })
-        await Family.connect(wallet1).mintHuman("Charlie", "Ketty", "Soprano", {
-            value: ethers.utils.parseEther("0.05"),
-        })
-        await MockedFamily.connect(wallet1).mintHuman("Bob", "Alice", "Wellingtone", {
-            value: ethers.utils.parseEther("0.05"),
-        })
-        await MockedFamily.connect(wallet1).mintHuman("Charlie", "Ketty", "Soprano", {
-            value: ethers.utils.parseEther("0.05"),
-        })
+        await Family.connect(wallet1).mintHuman(
+            utils.formatBytes32String("Bob"),
+            utils.formatBytes32String("Alice"),
+            utils.formatBytes32String("Wellingtone"),
+            {
+                value: ethers.utils.parseEther("0.05"),
+            }
+        )
+        await Family.connect(wallet1).mintHuman(
+            utils.formatBytes32String("Charlie"),
+            utils.formatBytes32String("Ketty"),
+            utils.formatBytes32String("Soprano"),
+            {
+                value: ethers.utils.parseEther("0.05"),
+            }
+        )
+        await MockedFamily.connect(wallet1).mintHuman(
+            utils.formatBytes32String("Bob"),
+            utils.formatBytes32String("Alice"),
+            utils.formatBytes32String("Wellingtone"),
+            {
+                value: ethers.utils.parseEther("0.05"),
+            }
+        )
+        await MockedFamily.connect(wallet1).mintHuman(
+            utils.formatBytes32String("Charlie"),
+            utils.formatBytes32String("Ketty"),
+            utils.formatBytes32String("Soprano"),
+            {
+                value: ethers.utils.parseEther("0.05"),
+            }
+        )
     })
     describe("negative tests", function () {
         it("should revert if user submit not enough ETH for the mint", async function () {
             await expect(
-                Family.connect(wallet1).mintHuman("Bob", "Monica", "Siegal", {
-                    value: ethers.utils.parseEther("0.049"),
-                })
+                Family.connect(wallet1).mintHuman(
+                    utils.formatBytes32String("Bob"),
+                    utils.formatBytes32String("Monica"),
+                    utils.formatBytes32String("Siegal"),
+                    {
+                        value: ethers.utils.parseEther("0.049"),
+                    }
+                )
             ).to.be.revertedWith("Not enough ether for a mint")
         })
         it("should revert if user trying to mint when maxSupply is reached", async function () {
-            await Family.connect(wallet1).mintHuman("Michael", "Amanda", "De Santa", {
-                value: ethers.utils.parseEther("0.05"),
-            })
-            await expect(
-                Family.connect(wallet1).mintHuman("Derek", "Angela", "Frost", {
+            await Family.connect(wallet2).mintHuman(
+                utils.formatBytes32String("Chris"),
+                utils.formatBytes32String("Jessy"),
+                utils.formatBytes32String("Rock"),
+                {
                     value: ethers.utils.parseEther("0.05"),
-                })
+                }
+            )
+            await Family.connect(wallet1).mintHuman(
+                utils.formatBytes32String("Michael"),
+                utils.formatBytes32String("Amanda"),
+                utils.formatBytes32String("De Santa"),
+                {
+                    value: ethers.utils.parseEther("0.05"),
+                }
+            )
+            await expect(
+                Family.connect(wallet1).mintHuman(
+                    utils.formatBytes32String("Derek"),
+                    utils.formatBytes32String("Angela"),
+                    utils.formatBytes32String("Frost"),
+                    {
+                        value: ethers.utils.parseEther("0.05"),
+                    }
+                )
             ).to.be.revertedWith("Collection sold out")
         })
     })
@@ -56,10 +100,14 @@ describe("mintHuman tests", function () {
         it("should assign name properly to Human object", async function () {
             console.log("      Random name is:" + (await Family.connect(wallet1).getDataAboutHuman(1))[2])
             console.log("      Mocked name is:" + (await MockedFamily.connect(wallet1).getDataAboutHuman(1))[2])
-            expect((await MockedFamily.connect(wallet1).getDataAboutHuman(1))[2]).to.equal("Ketty")
+            expect((await MockedFamily.connect(wallet1).getDataAboutHuman(1))[2]).to.equal(
+                utils.formatBytes32String("Ketty")
+            )
         })
         it("should assign lastName properly to Human object", async function () {
-            expect((await Family.connect(wallet1).getDataAboutHuman(1))[3]).to.equal("Soprano")
+            expect((await Family.connect(wallet1).getDataAboutHuman(1))[3]).to.equal(
+                utils.formatBytes32String("Soprano")
+            )
         })
         it("should assign actualAge properly to Human object", async function () {
             expect((await Family.connect(wallet1).getDataAboutHuman(1))[4]).to.equal(18)
@@ -68,9 +116,14 @@ describe("mintHuman tests", function () {
             expect((await Family.connect(wallet1).getDataAboutHuman(1))[5]).to.equal(18)
         })
         it("should assign mintTime properly to Human object", async function () {
-            await Family.connect(wallet1).mintHuman("Douglas", "Rosey", "Bruk", {
-                value: ethers.utils.parseEther("0.05"),
-            })
+            await Family.connect(wallet1).mintHuman(
+                utils.formatBytes32String("Douglas"),
+                utils.formatBytes32String("Rosey"),
+                utils.formatBytes32String("Bruk"),
+                {
+                    value: ethers.utils.parseEther("0.05"),
+                }
+            )
             blockNumAfter = await ethers.provider.getBlockNumber()
             blockAfter = await ethers.provider.getBlock(blockNumAfter)
             timestampAfter = blockAfter.timestamp
@@ -83,9 +136,14 @@ describe("mintHuman tests", function () {
             expect(await Family.connect(wallet1).getTotalSupply()).to.equal(2)
         })
         it("should _ownerHumanCount mapping was updated", async function () {
-            await Family.connect(wallet1).mintHuman("Franklin", "Nancy", "Pelosi", {
-                value: ethers.utils.parseEther("0.05"),
-            })
+            await Family.connect(wallet1).mintHuman(
+                utils.formatBytes32String("Franklin"),
+                utils.formatBytes32String("Nancy"),
+                utils.formatBytes32String("Pelosi"),
+                {
+                    value: ethers.utils.parseEther("0.05"),
+                }
+            )
             expect(await Family.connect(wallet1).getCountOfHumans(wallet1.address)).to.equal(3)
         })
         it("should check _humanToOwner mapping was updated", async function () {
@@ -97,12 +155,25 @@ describe("mintHuman tests", function () {
             blockAfter = await ethers.provider.getBlock(blockNumAfter)
             timestampAfter = blockAfter.timestamp
             await expect(
-                MockedFamily.connect(wallet1).mintHuman("Douglas", "Rosey", "Bruk", {
-                    value: ethers.utils.parseEther("0.05"),
-                })
+                MockedFamily.connect(wallet1).mintHuman(
+                    utils.formatBytes32String("Douglas"),
+                    utils.formatBytes32String("Rosey"),
+                    utils.formatBytes32String("Bruk"),
+                    {
+                        value: ethers.utils.parseEther("0.05"),
+                    }
+                )
             )
                 .to.emit(MockedFamily, "NewHuman")
-                .withArgs(2, 1, "Rosey", "Bruk", 18, timestampAfter + 1, wallet1.address)
+                .withArgs(
+                    2,
+                    1,
+                    utils.formatBytes32String("Rosey"),
+                    utils.formatBytes32String("Bruk"),
+                    18,
+                    timestampAfter + 1,
+                    wallet1.address
+                )
         })
     })
 })
