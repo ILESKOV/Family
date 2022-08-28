@@ -1,6 +1,7 @@
 const { expect } = require("chai")
 const { BigNumber } = require("ethers")
 const { ethers } = require("hardhat")
+const utils = ethers.utils
 
 describe("setMintPrice tests", function () {
     beforeEach(async function () {
@@ -9,12 +10,22 @@ describe("setMintPrice tests", function () {
         family = await ethers.getContractFactory("Family", owner)
         Family = await family.deploy("50000000000000000", 7, 18)
 
-        await Family.connect(wallet1).mintHuman("Bob", "Alice", "Wellingtone", {
-            value: ethers.utils.parseEther("0.05"),
-        })
-        await Family.connect(wallet1).mintHuman("Charlie", "Ketty", "Soprano", {
-            value: ethers.utils.parseEther("0.05"),
-        })
+        await Family.connect(wallet1).mintHuman(
+            utils.formatBytes32String("Bob"),
+            utils.formatBytes32String("Alice"),
+            utils.formatBytes32String("Wellingtone"),
+            {
+                value: ethers.utils.parseEther("0.05"),
+            }
+        )
+        await Family.connect(wallet1).mintHuman(
+            utils.formatBytes32String("Charlie"),
+            utils.formatBytes32String("Ketty"),
+            utils.formatBytes32String("Soprano"),
+            {
+                value: ethers.utils.parseEther("0.05"),
+            }
+        )
     })
     describe("negative test", function () {
         it("should revert if not the owner trying to set max supply", async function () {
