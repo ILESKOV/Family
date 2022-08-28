@@ -46,6 +46,16 @@ Create .env file inside project folder
 - You can get your ethereum or testnet API key [here](https://infura.io/dashboard/ethereum),[here](https://www.alchemy.com) or any other service that allow you to connect to the nodes
 - You can get your private key from your wallet(⚠️Don't share your private key with untrusted parties) 
 - You can get your etherscan API -key [here](https://etherscan.io/myapikey).
+```
+RINKEBY_API = <rinkeby API key>
+MAINNET_API = <Ethereum mainnet API key>
+PRIVATE_KEY = <Private key of your wallet u want to deploy contracts from>
+ETHERSCAN_KEY = <Etherscan API key in order to verify your contracts>
+MINT_PRICE = <Constructor parameter mint price in ETH in wei(example: 0.05 ETH = 50000000000000000 wei)>
+MAX_SUPPLY = <Constructor parameter max limit of tokens to be minted>
+MATURITY_AGE = <Constructor parameter age when token will change from KID type to ADULT type>
+```
+
 ![Example screenshot](./helpers/Screenshot8.png)
 
 ### 4. ⚠️  Run Tests
