@@ -101,3 +101,4 @@ contract MockedFamily is Family {
         _mintHuman(getTotalSupply(), gender, name_, lastname_, 0);
     }
 }
+
