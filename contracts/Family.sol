@@ -106,7 +106,7 @@ contract Family is ERC721, Ownable {
 
     /**
      * @dev Emitted when the owner updates the minted token price.
-     * @param newMintPrice new _maturityAge.
+     * @param newMintPrice new price for mint humans.
      */
     event MintPriceUpdated(uint256 newMintPrice);
 
