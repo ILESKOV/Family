@@ -1,17 +1,36 @@
-const { expect } = require("chai")
-const { BigNumber } = require("ethers")
-const { ethers } = require("hardhat")
+import { expect } from "chai"
+import { ethers } from "hardhat"
+import { ContractFactory, Contract, Signer, BigNumber } from "ethers"
+
 const utils = ethers.utils
+const contractName = "Family"
+const mockName = "MockedFamily"
+let contractFactory: ContractFactory
+let mockedContractFactory: ContractFactory
+let Family: Contract
+let MockedFamily: Contract
+let owner: Signer
+let wallet1: Signer
+let wallet2: Signer
+let ownerWallet: string
+let wallet1Wallet: string
+let wallet2Wallet: string
+let blockNumAfter: number
+let timestampAfter: number
+let blockAfter: any
 
 describe("mintHuman tests", function () {
     beforeEach(async function () {
         ;[owner, wallet1, wallet2] = await ethers.getSigners()
+        ownerWallet = await owner.getAddress()
+        wallet1Wallet = await wallet1.getAddress()
+        wallet2Wallet = await wallet2.getAddress()
 
-        family = await ethers.getContractFactory("Family", owner)
-        Family = await family.deploy("50000000000000000", 3, 18)
+        contractFactory = await ethers.getContractFactory(contractName, owner)
+        Family = await contractFactory.deploy("50000000000000000", 3, 18)
 
-        mockedFamily = await ethers.getContractFactory("MockedFamily", owner)
-        MockedFamily = await mockedFamily.deploy("50000000000000000", 3, 18)
+        mockedContractFactory = await ethers.getContractFactory(mockName, owner)
+        MockedFamily = await mockedContractFactory.deploy("50000000000000000", 3, 18)
 
         await Family.connect(wallet1).mintHuman(
             utils.formatBytes32String("Bob"),
@@ -130,7 +149,7 @@ describe("mintHuman tests", function () {
             expect((await Family.connect(wallet1).getDataAboutHuman(1))[6]).to.equal(timestampAfter - 3)
         })
         it("should assign owner address properly to Human object", async function () {
-            expect((await Family.connect(wallet1).getDataAboutHuman(1))[7]).to.equal(wallet1.address)
+            expect((await Family.connect(wallet1).getDataAboutHuman(1))[7]).to.equal(wallet1Wallet)
         })
         it("should check totalSupply is correct", async function () {
             expect(await Family.connect(wallet1).getTotalSupply()).to.equal(2)
@@ -144,10 +163,10 @@ describe("mintHuman tests", function () {
                     value: ethers.utils.parseEther("0.05"),
                 }
             )
-            expect(await Family.connect(wallet1).getCountOfHumans(wallet1.address)).to.equal(3)
+            expect(await Family.connect(wallet1).getCountOfHumans(wallet1Wallet)).to.equal(3)
         })
         it("should check _humanToOwner mapping was updated", async function () {
-            expect(await Family.getOwnerOfHuman(1)).to.equal(wallet1.address)
+            expect(await Family.getOwnerOfHuman(1)).to.equal(wallet1Wallet)
             console.log("      New OBJECT is:" + (await Family.connect(wallet1).getDataAboutHuman(1)))
         })
         it("should emit an NewHuman event", async () => {
@@ -172,7 +191,7 @@ describe("mintHuman tests", function () {
                     utils.formatBytes32String("Bruk"),
                     18,
                     timestampAfter + 1,
-                    wallet1.address
+                    wallet1Wallet
                 )
         })
     })
