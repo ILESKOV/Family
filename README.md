@@ -79,7 +79,7 @@ $ npm run polygon
 $ npm run mainnet
 ``` 
 
-## Note: 
+### Note: 
 
 deploy.ts implements the verification script and you don't need to complete any additional steps in order to verify the contract.
 
