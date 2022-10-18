@@ -67,7 +67,7 @@ $ npm run test
 $ npm run coverage
 ```
 
-### 5. 🚀 Deploy to Goerli, Polygon or Mainnet
+### 5. 🚀 Deploy and verify on Goerli, Polygon or Mainnet
 
 ```
 $ npm run goerli
@@ -79,7 +79,9 @@ $ npm run polygon
 $ npm run mainnet
 ``` 
 
-## Note: deploy.ts implements the verification script and you don't need to complete any additional steps in order to verify the contract.
+## Note: 
+
+deploy.ts implements the verification script and you don't need to complete any additional steps in order to verify the contract.
 
 
 ## 💬 Contact
