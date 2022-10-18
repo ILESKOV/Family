@@ -67,31 +67,19 @@ $ npm run test
 $ npm run coverage
 ```
 
-### 5. 🚀 Deploy to Rinkeby or Mainnet
+### 5. 🚀 Deploy to Goerli, Polygon or Mainnet
+
 ```
-$ npm run rinkeby
+$ npm run goerli
+``` 
+```
+$ npm run polygon
 ``` 
 ```
 $ npm run mainnet
 ``` 
 
-### 6. ✏️ Insert current contract address into package.json
-```
-"verify:rinkeby": "npx hardhat verify --network rinkeby --contract contracts/Family.sol:Family --constructor-args helpers/arguments.js <Family.sol address>",
-"verify:mainnet": "npx hardhat verify --network ethereum --contract contracts/Family.sol:Family --constructor-args helpers/arguments.js <Family.sol address]>"
-``` 
-![Example screenshot](./helpers/Screenshot7.png)
-
-### 7. 📜 Verify contracts
-```
-$ npm run verify:rinkeby
-```
-
-or for mainnet
-
-```
- $ npm run verify:mainnet
-```
+## Note: deploy.ts implements the verification script and you don't need to complete any additional steps in order to verify the contract.
 
 
 ## 💬 Contact
