@@ -7,10 +7,9 @@
         "prettier": "prettier --write 'contracts/'",
         "coverage": "npx hardhat coverage --testfiles test",
         "test": "npx hardhat test",
-        "rinkeby": "npx hardhat run --network rinkeby scripts/deploy.js",
-        "mainnet ": "npx hardhat run --network ethereum scripts/deploy.js",
-        "verify:rinkeby": "npx hardhat verify --network rinkeby --contract contracts/Family.sol:Family --constructor-args helpers/arguments.js [Family.sol address]",
-        "verify:mainnet": "npx hardhat verify --network ethereum --contract contracts/Family.sol:Family --constructor-args helpers/arguments.js [Family.sol address]",
+        "goerli": "npx hardhat run --network goerli scripts/deploy.ts",
+        "mainnet ": "npx hardhat run --network ethereum scripts/deploy.ts",
+        "polygon": "npx hardhat run --network polygon scripts/deploy.ts",
         "docgen": "npx hardhat docgen",
         "slither": "slither .",
         "solhint": "solhint 'contracts/**/*.sol'",
@@ -49,4 +48,3 @@
         "solidity-docgen": "^0.6.0-beta.22"
     }
 }
-

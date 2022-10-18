@@ -1,0 +1,7 @@
+coverage
+coverage.json
+node_modules
+.env
+artifacts
+cache
+typechain-types
