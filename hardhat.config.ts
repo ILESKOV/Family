@@ -1,6 +1,7 @@
 import "@nomiclabs/hardhat-waffle"
 import "@nomiclabs/hardhat-solhint"
 import "@nomiclabs/hardhat-etherscan"
+import "@typechain/hardhat"
 import "solidity-coverage"
 import "solidity-docgen"
 import "hardhat-contract-sizer"
