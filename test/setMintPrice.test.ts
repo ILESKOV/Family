@@ -1,14 +1,27 @@
-const { expect } = require("chai")
-const { BigNumber } = require("ethers")
-const { ethers } = require("hardhat")
+import { expect } from "chai"
+import { ethers } from "hardhat"
+import { ContractFactory, Contract, Signer, BigNumber } from "ethers"
+
 const utils = ethers.utils
+const contractName = "Family"
+let contractFactory: ContractFactory
+let Family: Contract
+let owner: Signer
+let wallet1: Signer
+let wallet2: Signer
+let ownerWallet: string
+let wallet1Wallet: string
+let wallet2Wallet: string
 
 describe("setMintPrice tests", function () {
     beforeEach(async function () {
         ;[owner, wallet1, wallet2] = await ethers.getSigners()
+        ownerWallet = await owner.getAddress()
+        wallet1Wallet = await wallet1.getAddress()
+        wallet2Wallet = await wallet2.getAddress()
 
-        family = await ethers.getContractFactory("Family", owner)
-        Family = await family.deploy("50000000000000000", 7, 18)
+        contractFactory = await ethers.getContractFactory(contractName, owner)
+        Family = await contractFactory.deploy("50000000000000000", 7, 18)
 
         await Family.connect(wallet1).mintHuman(
             utils.formatBytes32String("Bob"),
