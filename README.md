@@ -56,7 +56,7 @@ MAX_SUPPLY = <Constructor parameter max limit of tokens to be minted>
 MATURITY_AGE = <Constructor parameter age when token will change from KID type to ADULT type>
 ```
 
-![Example screenshot](./helpers/Screenshot8.png)
+<!--![Example screenshot](./helpers/Screenshot8.png)-->
 
 ### 4. ⚠️  Run Tests
 ```
