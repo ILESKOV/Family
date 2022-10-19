@@ -19,7 +19,7 @@ let blockNumAfter: number
 let timestampAfter: number
 let blockAfter: any
 
-describe("breeding tests", function () {
+describe("breeding() tests", function () {
     beforeEach(async function () {
         ;[owner, wallet1, wallet2] = await ethers.getSigners()
         ownerWallet = await owner.getAddress()
@@ -341,7 +341,6 @@ describe("breeding tests", function () {
                 utils.formatBytes32String("Angel")
             )
             expect(await MockedFamily.getOwnerOfHuman(4)).to.equal(wallet2Wallet)
-            console.log("      New OBJECT is:" + (await MockedFamily.connect(wallet1).getDataAboutHuman(4)))
         })
         it("should emit an NewHuman event", async () => {
             blockNumAfter = await ethers.provider.getBlockNumber()
