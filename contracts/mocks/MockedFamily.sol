@@ -18,11 +18,9 @@ contract MockedFamily is Family {
      * @param maturityAge_ initial maturity age for tokens at which a breeding()
      * function can be called
      */
-    constructor(
-        uint256 mintPrice_,
-        uint256 maxSupply_,
-        uint256 maturityAge_
-    ) Family(mintPrice_, maxSupply_, maturityAge_) {}
+    constructor(uint256 mintPrice_, uint256 maxSupply_, uint256 maturityAge_)
+        Family(mintPrice_, maxSupply_, maturityAge_)
+    {}
 
     /**
      * @dev Overriden function from Family contract. In case user mint his first NFT
@@ -31,11 +29,7 @@ contract MockedFamily is Family {
      * @param womanName_ The human token name if it will be randomly minted as a WOMAN token
      * @param lastname_ The human token lastname
      */
-    function mintHuman(
-        bytes32 manName_,
-        bytes32 womanName_,
-        bytes32 lastname_
-    ) external payable override {
+    function mintHuman(bytes32 manName_, bytes32 womanName_, bytes32 lastname_) external payable override {
         require(msg.value >= getMintPrice(), "Not enough ether for a mint");
         require(getTotalSupply() < getMaxSupply(), "Collection sold out");
         uint256 random;
@@ -59,29 +53,27 @@ contract MockedFamily is Family {
      * @dev Overriden function from Family contract. In case user has already 3 NFTs when he call
      * breeding function gender of a KID will be setted as a GIRL type, in other cases gender will
      * be setted as a BOY type
-     * @param _firstParentID id of first parent token
-     * @param _secondParentID id of second parent token
-     * @param _boyName The human token name if it will be randomly minted as a KID_BOY token
-     * @param _girlName The human token name if it will be randomly minted as a KID_GIRL token
+     * @param firstParentID_ id of first parent token
+     * @param secondParentID_ id of second parent token
+     * @param boyName_ The human token name if it will be randomly minted as a KID_BOY token
+     * @param girlName_ The human token name if it will be randomly minted as a KID_GIRL token
      */
-    function breeding(
-        uint256 _firstParentID,
-        uint256 _secondParentID,
-        bytes32 _boyName,
-        bytes32 _girlName
-    ) external override {
+    function breeding(uint256 firstParentID_, uint256 secondParentID_, bytes32 boyName_, bytes32 girlName_)
+        external
+        override
+    {
         require(getTotalSupply() < getMaxSupply(), "Collection sold out");
-        require(_firstParentID != _secondParentID, "One parent cannot reproduce alone");
+        require(firstParentID_ != secondParentID_, "One parent cannot reproduce alone");
         require(
-            getOwnerOfHuman(_firstParentID) == msg.sender && getOwnerOfHuman(_secondParentID) == msg.sender,
+            getOwnerOfHuman(firstParentID_) == msg.sender && getOwnerOfHuman(secondParentID_) == msg.sender,
             "You are not the owner of one or more humans"
         );
         require(
-            checkAgeChanging(_firstParentID) >= 18 && checkAgeChanging(_secondParentID) == 18,
+            checkAgeChanging(firstParentID_) >= 18 && checkAgeChanging(secondParentID_) == 18,
             "One or more of your tokens are not mature enough"
         );
         require(
-            (getDataAboutHuman(_firstParentID).gender) != (getDataAboutHuman(_secondParentID).gender),
+            (getDataAboutHuman(firstParentID_).gender) != (getDataAboutHuman(secondParentID_).gender),
             "Tokens share the same gender and cannot reproduce themselves"
         );
         uint256 random;
@@ -92,13 +84,12 @@ contract MockedFamily is Family {
         bytes32 name_;
         if (random == 0) {
             gender = GENDER.KID_BOY;
-            name_ = _boyName;
+            name_ = boyName_;
         } else {
             gender = GENDER.KID_GIRL;
-            name_ = _girlName;
+            name_ = girlName_;
         }
-        bytes32 lastname_ = getDataAboutHuman(_firstParentID).lastname;
+        bytes32 lastname_ = getDataAboutHuman(firstParentID_).lastname;
         _mintHuman(getTotalSupply(), gender, name_, lastname_, 0);
     }
 }
-
