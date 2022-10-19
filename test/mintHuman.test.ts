@@ -19,7 +19,7 @@ let blockNumAfter: number
 let timestampAfter: number
 let blockAfter: any
 
-describe("mintHuman tests", function () {
+describe("mintHuman() tests", function () {
     beforeEach(async function () {
         ;[owner, wallet1, wallet2] = await ethers.getSigners()
         ownerWallet = await owner.getAddress()
@@ -112,13 +112,9 @@ describe("mintHuman tests", function () {
             expect((await Family.connect(wallet1).getDataAboutHuman(1))[0]).to.equal(1)
         })
         it("should assign gender properly to Human object", async function () {
-            console.log("      Random gender is:" + (await Family.connect(wallet1).getDataAboutHuman(1))[1])
-            console.log("      Mocked gender is:" + (await MockedFamily.connect(wallet1).getDataAboutHuman(1))[1])
             expect((await MockedFamily.connect(wallet1).getDataAboutHuman(1))[1]).to.equal(1)
         })
         it("should assign name properly to Human object", async function () {
-            console.log("      Random name is:" + (await Family.connect(wallet1).getDataAboutHuman(1))[2])
-            console.log("      Mocked name is:" + (await MockedFamily.connect(wallet1).getDataAboutHuman(1))[2])
             expect((await MockedFamily.connect(wallet1).getDataAboutHuman(1))[2]).to.equal(
                 utils.formatBytes32String("Ketty")
             )
@@ -167,7 +163,6 @@ describe("mintHuman tests", function () {
         })
         it("should check _humanToOwner mapping was updated", async function () {
             expect(await Family.getOwnerOfHuman(1)).to.equal(wallet1Wallet)
-            console.log("      New OBJECT is:" + (await Family.connect(wallet1).getDataAboutHuman(1)))
         })
         it("should emit an NewHuman event", async () => {
             blockNumAfter = await ethers.provider.getBlockNumber()
