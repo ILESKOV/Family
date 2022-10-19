@@ -119,11 +119,7 @@ contract Family is ERC721, Ownable {
      * @param maturityAge_ initial maturity age for tokens at which a breeding()
      * function can be called.
      */
-    constructor(
-        uint256 mintPrice_,
-        uint256 maxSupply_,
-        uint256 maturityAge_
-    ) ERC721("Family", "FAM") {
+    constructor(uint256 mintPrice_, uint256 maxSupply_, uint256 maturityAge_) ERC721("Family", "FAM") {
         require(mintPrice_ > 0, "Mint price cannot be zero");
         require(maxSupply_ > 0, "Max supply cannot be zero");
         require(maturityAge_ > 16, "Maturity age must be higher than 16");
@@ -147,11 +143,7 @@ contract Family is ERC721, Ownable {
      *
      * Emits a {NewHuman} event.
      */
-    function mintHuman(
-        bytes32 manName_,
-        bytes32 womanName_,
-        bytes32 lastname_
-    ) external payable virtual {
+    function mintHuman(bytes32 manName_, bytes32 womanName_, bytes32 lastname_) external payable virtual {
         require(msg.value >= _mintPrice, "Not enough ether for a mint");
         require(_totalSupply <= _maxSupply, "Collection sold out");
         uint256 pseudoRandom = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender))) % 2;
@@ -176,50 +168,48 @@ contract Family is ERC721, Ownable {
      * Requirements:
      *
      * - Users can breed tokens until the `_maxSupply` value is reached.
-     * - `_firstParentID` and `_secondParentID` must be different values.
-     * - `_humanToOwner[_firstParentID]` and `_humanToOwner[_secondParentID]` must be `msg.sender` address.
-     * - `_firstParentID` and `_secondParentID` Humans `actualAge` must reach `_maturityAge`.
-     * - `_peoples[_firstParentID].gender` and `_peoples[_secondParentID].gender` must be different values.
+     * - `firstParentID_` and `secondParentID_` must be different values.
+     * - `_humanToOwner[firstParentID_]` and `_humanToOwner[secondParentID_]` must be `msg.sender` address.
+     * - `firstParentID_` and `secondParentID_` Humans `actualAge` must reach `_maturityAge`.
+     * - `_peoples[firstParentID_].gender` and `_peoples[secondParentID_].gender` must be different values.
      *
-     * @param _firstParentID id of first parent token.
-     * @param _secondParentID id of second parent token.
-     * @param _boyName The human token name if it will be pseudo randomly minted as a KID_BOY token.
-     * @param _girlName The human token name if it will be pseudo randomly minted as a KID_GIRL token.
+     * @param firstParentID_ id of first parent token.
+     * @param secondParentID_ id of second parent token.
+     * @param boyName_ The human token name if it will be pseudo randomly minted as a KID_BOY token.
+     * @param girlName_ The human token name if it will be pseudo randomly minted as a KID_GIRL token.
      *
      * Emits a {NewHuman} event.
      */
-    function breeding(
-        uint256 _firstParentID,
-        uint256 _secondParentID,
-        bytes32 _boyName,
-        bytes32 _girlName
-    ) external virtual {
+    function breeding(uint256 firstParentID_, uint256 secondParentID_, bytes32 boyName_, bytes32 girlName_)
+        external
+        virtual
+    {
         require(_totalSupply <= _maxSupply, "Collection sold out");
-        require(_firstParentID != _secondParentID, "One parent cannot reproduce alone");
+        require(firstParentID_ != secondParentID_, "One parent cannot reproduce alone");
         require(
-            _humanToOwner[_firstParentID] == msg.sender && _humanToOwner[_secondParentID] == msg.sender,
+            _humanToOwner[firstParentID_] == msg.sender && _humanToOwner[secondParentID_] == msg.sender,
             "You are not the owner of one or more NFTs"
         );
         require(
-            checkAgeChanging(_firstParentID) >= _maturityAge && checkAgeChanging(_secondParentID) == _maturityAge,
+            checkAgeChanging(firstParentID_) >= _maturityAge && checkAgeChanging(secondParentID_) == _maturityAge,
             "One or more of your tokens are not mature enough"
         );
-        Human memory firstParent = _peoples[_firstParentID];
+        Human memory firstParent = _peoples[firstParentID_];
         require(
-            (firstParent.gender) != (_peoples[_secondParentID].gender),
+            (firstParent.gender) != (_peoples[secondParentID_].gender),
             "Tokens share the same gender and cannot reproduce themselves"
         );
         uint256 pseudoRandom = uint256(
-            keccak256(abi.encodePacked(block.difficulty, block.timestamp, _boyName, _girlName, msg.sender))
+            keccak256(abi.encodePacked(block.difficulty, block.timestamp, boyName_, girlName_, msg.sender))
         ) % 2;
         GENDER gender;
         bytes32 name_;
         if (pseudoRandom == 0) {
             gender = GENDER.KID_BOY;
-            name_ = _boyName;
+            name_ = boyName_;
         } else {
             gender = GENDER.KID_GIRL;
-            name_ = _girlName;
+            name_ = girlName_;
         }
         bytes32 lastname_ = firstParent.lastname;
         _mintHuman(_totalSupply, gender, name_, lastname_, 0);
@@ -229,22 +219,22 @@ contract Family is ERC721, Ownable {
      * @dev This is a function to check and update the actual age of a human token.
      * Can only be called by the owner of the token.
      * Function update KID tokens to MAN or WOMEN in case they reach maturity age.
-     * @param _id token id to check.
+     * @param id_ token id to check.
      *
      * Emits a {AgeUpdated} event.
      */
-    function checkAgeChanging(uint256 _id) public returns (uint256) {
-        require(_humanToOwner[_id] == msg.sender, "You are not the owner of this NFT");
-        Human memory human = _peoples[_id];
-        _peoples[_id].actualAge = (block.timestamp - human.mintTime) / 86400 + human.mintAge;
-        uint256 actualAge = _peoples[_id].actualAge;
+    function checkAgeChanging(uint256 id_) public returns (uint256) {
+        require(_humanToOwner[id_] == msg.sender, "You are not the owner of this NFT");
+        Human memory human = _peoples[id_];
+        _peoples[id_].actualAge = (block.timestamp - human.mintTime) / 86400 + human.mintAge;
+        uint256 actualAge = _peoples[id_].actualAge;
         if (human.gender == GENDER.KID_BOY && actualAge >= _maturityAge) {
-            _peoples[_id].gender = GENDER.MAN;
+            _peoples[id_].gender = GENDER.MAN;
         } else if (human.gender == GENDER.KID_GIRL && actualAge >= _maturityAge) {
-            _peoples[_id].gender = GENDER.WOMEN;
+            _peoples[id_].gender = GENDER.WOMEN;
         }
         emit AgeUpdated(
-            _id,
+            id_,
             human.gender,
             human.name,
             human.lastname,
@@ -267,13 +257,7 @@ contract Family is ERC721, Ownable {
      *
      * Emits a {NewHuman} event.
      */
-    function _mintHuman(
-        uint256 tokenId_,
-        GENDER gender_,
-        bytes32 name_,
-        bytes32 lastname_,
-        uint256 age_
-    ) internal {
+    function _mintHuman(uint256 tokenId_, GENDER gender_, bytes32 name_, bytes32 lastname_, uint256 age_) internal {
         address caller = msg.sender;
         uint256 tokenId = _totalSupply;
         _ownerHumanCount[caller]++;
@@ -338,10 +322,10 @@ contract Family is ERC721, Ownable {
      *
      * Emits a {WithdrawalOfOwner} event.
      */
-    function withdrawETH(uint256 amount) external onlyOwner {
-        require(amount <= address(this).balance, "Not enough ETH");
-        payable(owner()).transfer(amount);
-        emit WithdrawalOfOwner(msg.sender, amount);
+    function withdrawETH(uint256 amount_) external onlyOwner {
+        require(amount_ <= address(this).balance, "Not enough ETH");
+        payable(owner()).transfer(amount_);
+        emit WithdrawalOfOwner(msg.sender, amount_);
     }
 
     /**
