@@ -47,7 +47,7 @@ Create .env file inside project folder
 - You can get your private key from your wallet(⚠️Don't share your private key with untrusted parties) 
 - You can get your etherscan API -key [here](https://etherscan.io/myapikey).
 ```
-RINKEBY_API = <rinkeby API key>
+GOERLI_API = <rinkeby API key>
 MAINNET_API = <Ethereum mainnet API key>
 PRIVATE_KEY = <Private key of your wallet u want to deploy contracts from>
 ETHERSCAN_KEY = <Etherscan API key in order to verify your contracts>
