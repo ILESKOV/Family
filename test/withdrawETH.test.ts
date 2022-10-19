@@ -38,7 +38,7 @@ beforeEach(async () => {
         { value: ethers.utils.parseEther("0.05") }
     )
 })
-describe("withdrawETH tests", function () {
+describe("withdrawETH() tests", function () {
     describe("negative tests", function () {
         it("should revert if not owner is caller", async () => {
             await expect(Family.connect(wallet1).withdrawETH(BigNumber.from("1000000000000000000"))).to.be.revertedWith(
