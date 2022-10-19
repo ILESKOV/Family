@@ -19,7 +19,7 @@ let blockNumAfter: number
 let timestampAfter: number
 let blockAfter: any
 
-describe("checkAgeChanging tests", function () {
+describe("checkAgeChanging() tests", function () {
     beforeEach(async function () {
         ;[owner, wallet1, wallet2] = await ethers.getSigners()
         ownerWallet = await owner.getAddress()
