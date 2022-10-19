@@ -13,7 +13,7 @@ let ownerWallet: string
 let wallet1Wallet: string
 let wallet2Wallet: string
 
-describe("setMaxSupply tests", function () {
+describe("setMaxSupply() tests", function () {
     beforeEach(async function () {
         ;[owner, wallet1, wallet2] = await ethers.getSigners()
         ownerWallet = await owner.getAddress()
